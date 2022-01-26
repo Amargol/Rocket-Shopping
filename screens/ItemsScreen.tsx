@@ -20,7 +20,7 @@ export default function ItemsScreen() {
   }
 
   return (
-    <KeyboardAvoidingView style={styles.container} behavior="padding" keyboardVerticalOffset={90}>
+    <KeyboardAvoidingView style={styles.container} behavior="padding" keyboardVerticalOffset={88}>
       <View style={styles.container}>
         <CheckList query={searchQuery} />
       </View>
@@ -30,7 +30,7 @@ export default function ItemsScreen() {
           style={styles.input}
           value={searchQuery}
           onChangeText={setSearchQuery}
-          clearButtonMode="while-editing"
+          clearButtonMode="always"
         />
         <Pressable onPress={addItem}>
           <View style={styles.addButton}>

@@ -5,13 +5,13 @@ export enum ItemType {
   OneTime
 }
 
-enum ItemState {
+export enum ItemState {
   Checked,
   Unchecked,
   Disabled
 }
 
-class Item {
+export class Item {
   name: string
   type: ItemType
   state: ItemState
@@ -35,6 +35,7 @@ class ItemsStore {
       items: observable,
       addItem: action,
       removeItem: action,
+      toggleItemCheck: action,
       count: computed
     })
   }
@@ -45,6 +46,18 @@ class ItemsStore {
 
   removeItem(id : number) {
     this.items.filter(item => item.id != id)
+  }
+
+  toggleItemCheck(id : number) {
+    this.items = this.items.map((item) => {
+      if (item.id == id) {
+        let newItem = new Item(item.name, ItemType.Recurring)
+        newItem.state = item.state == ItemState.Checked ? ItemState.Unchecked : ItemState.Checked
+        return newItem
+      }
+
+      return item
+    })
   }
 
   get count() {

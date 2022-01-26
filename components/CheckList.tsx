@@ -5,7 +5,10 @@ import {
   Text,
   View
 } from 'react-native';
-import { itemsStore } from '../store/itemsStore';
+import { itemsStore, ItemState } from '../store/itemsStore';
+import Checkbox from 'expo-checkbox';
+import ItemCheckbox from './ItemCheckbox';
+
 
 interface CheckListProps {
   query : string
@@ -15,12 +18,13 @@ interface CheckListProps {
 export default class CheckList extends Component<CheckListProps> {
 
   render() {
+    console.log("oh")
     return (
       <View style={styles.container}>
         <Text style={styles.txt}>{this.props.query}</Text>
         {
           itemsStore.items.map((item) => {
-            return <Text style={styles.txt} key={item.id}>{item.name}</Text>
+            return <ItemCheckbox item={item} key={item.id}/>
           })
         }
       </View>
@@ -30,9 +34,9 @@ export default class CheckList extends Component<CheckListProps> {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    // flex: 1,
+    // justifyContent: 'center',
+    // alignItems: 'center',
   },
   txt: {
     color: "white"
