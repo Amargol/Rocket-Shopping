@@ -22,7 +22,7 @@ export default class CheckList extends Component<CheckListProps> {
     return (
       <View style={styles.container}>
         {
-          itemsStore.items.map((item) => {
+          itemsStore.sortedItems.map((item) => {
             return <ItemCheckbox item={item} key={item.id}/>
           })
         }

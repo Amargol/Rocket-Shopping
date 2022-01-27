@@ -6,9 +6,9 @@ export enum ItemType {
 }
 
 export enum ItemState {
-  Checked,
-  Unchecked,
-  Disabled
+  Unchecked = 0,
+  Checked = 1,
+  Disabled = 2
 }
 
 export class Item {
@@ -36,7 +36,8 @@ class ItemsStore {
       addItem: action,
       removeItem: action,
       toggleItemCheck: action,
-      count: computed
+      count: computed,
+      sortedItems: computed
     })
   }
 
@@ -62,6 +63,12 @@ class ItemsStore {
 
   get count() {
     return this.items.length
+  }
+
+  get sortedItems() {
+    return this.items.concat().sort((a, b) => {
+      return a.state - b.state
+    })
   }
 }
 
