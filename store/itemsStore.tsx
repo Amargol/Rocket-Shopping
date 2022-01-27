@@ -1,9 +1,5 @@
 import { action, computed, makeObservable, observable } from "mobx"
-
-export enum ItemType {
-  Recurring,
-  OneTime
-}
+import { LayoutAnimation } from "react-native"
 
 export enum ItemState {
   Unchecked = 0,
@@ -13,17 +9,24 @@ export enum ItemState {
 
 export class Item {
   name: string
-  type: ItemType
   state: ItemState
   notes: string
-  id: number
+  id: string
 
-  constructor (name : string, type : ItemType) {
+  constructor (name : string) {
     this.name = name
-    this.type = type
     this.state = ItemState.Unchecked
     this.notes = ""
-    this.id = Date.now()
+    this.id = Date.now().toString() + "_" + ((Math.random() * 1000000) >> 0).toString()
+  }
+
+  static clone (item : Item) : Item {
+    let res = new Item(item.name)
+    res.state = item.state
+    res.notes = item.notes
+    res.id = item.id
+
+    return res
   }
 }
 
@@ -39,20 +42,25 @@ class ItemsStore {
       count: computed,
       sortedItems: computed
     })
+
+    this.addItem("one")
+    this.addItem("two")
+    this.addItem("three")
+    this.addItem("four")
   }
 
-  addItem(name : string, type : ItemType) {
-    this.items = [...this.items, new Item(name, type)]
+  addItem(name : string) {
+    this.items = [...this.items, new Item(name)]
   }
 
-  removeItem(id : number) {
+  removeItem(id : string) {
     this.items.filter(item => item.id != id)
   }
 
-  toggleItemCheck(id : number) {
+  toggleItemCheck(id : string) {
     this.items = this.items.map((item) => {
       if (item.id == id) {
-        let newItem = new Item(item.name, ItemType.Recurring)
+        let newItem = Item.clone(item)
         newItem.state = item.state == ItemState.Checked ? ItemState.Unchecked : ItemState.Checked
         return newItem
       }

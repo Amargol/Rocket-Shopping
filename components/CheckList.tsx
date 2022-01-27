@@ -18,11 +18,11 @@ interface CheckListProps {
 export default class CheckList extends Component<CheckListProps> {
 
   render() {
-    console.log("oh")
+    console.log(itemsStore.sortedItems)
     return (
       <View style={styles.container}>
         {
-          itemsStore.sortedItems.map((item) => {
+          itemsStore.sortedItems.filter((item) => item.name.toLowerCase().indexOf(this.props.query.toLowerCase()) !== -1).map((item) => {
             return <ItemCheckbox item={item} key={item.id}/>
           })
         }

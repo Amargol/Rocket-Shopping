@@ -1,11 +1,11 @@
 import React from "react";
-import { Button, KeyboardAvoidingView, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Button, KeyboardAvoidingView, LayoutAnimation, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { FontAwesome5 } from '@expo/vector-icons'; 
 
 
 import EditScreenInfo from '../components/EditScreenInfo';
 import CheckList from "../components/CheckList";
-import { itemsStore, ItemType } from "../store/itemsStore";
+import { itemsStore } from "../store/itemsStore";
 
 // lightColor="#eee" darkColor="rgba(255,255,255,0.1)" 
 
@@ -15,7 +15,7 @@ export default function ItemsScreen() {
   const addItem = () => {
     console.log(itemsStore.items)
 
-    itemsStore.addItem(searchQuery, ItemType.Recurring)
+    itemsStore.addItem(searchQuery)
     setSearchQuery("")
   }
 
@@ -29,7 +29,7 @@ export default function ItemsScreen() {
           placeholder="Search or Add Item"
           style={styles.input}
           value={searchQuery}
-          onChangeText={setSearchQuery}
+          onChangeText={(value) => {LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);setSearchQuery(value)}}
           clearButtonMode="always"
         />
         <Pressable onPress={addItem}>
