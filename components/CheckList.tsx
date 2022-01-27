@@ -21,7 +21,6 @@ export default class CheckList extends Component<CheckListProps> {
     console.log("oh")
     return (
       <View style={styles.container}>
-        <Text style={styles.txt}>{this.props.query}</Text>
         {
           itemsStore.items.map((item) => {
             return <ItemCheckbox item={item} key={item.id}/>
