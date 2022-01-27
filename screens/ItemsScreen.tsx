@@ -19,6 +19,25 @@ export default function ItemsScreen() {
     setSearchQuery("")
   }
 
+  const onChangeText = (value: string) => {
+    LayoutAnimation.configureNext({
+      duration: 100,
+      create: {
+        type: LayoutAnimation.Types.linear,
+        property: LayoutAnimation.Properties.opacity
+      },
+      update: {
+        type: LayoutAnimation.Types.linear,
+      },
+      delete: {
+        type: LayoutAnimation.Types.linear,
+        property: LayoutAnimation.Properties.opacity
+      }
+    })
+
+    setSearchQuery(value)
+  }
+
   return (
     <KeyboardAvoidingView style={styles.container} behavior="padding" keyboardVerticalOffset={88}>
       <View style={styles.container}>
@@ -29,7 +48,7 @@ export default function ItemsScreen() {
           placeholder="Search or Add Item"
           style={styles.input}
           value={searchQuery}
-          onChangeText={(value) => {LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);setSearchQuery(value)}}
+          onChangeText={(value) => {onChangeText(value)}}
           clearButtonMode="always"
         />
         <Pressable onPress={addItem}>

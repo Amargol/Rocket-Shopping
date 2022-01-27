@@ -40,18 +40,18 @@ export default class ItemCheckbox extends Component<ItemCheckboxProps, ItemCheck
     LayoutAnimation.configureNext({
       duration: 100,
       create: {
-        type: 'linear',
-        property: 'opacity'
+        type: LayoutAnimation.Types.linear,
+        property: LayoutAnimation.Properties.opacity
       },
       update: {
-        type: LayoutAnimation.Types.easeInEaseOut,
-        springDamping: 0.4
+        type: LayoutAnimation.Types.linear,
       },
       delete: {
-        type: 'linear',
-        property: 'opacity'
+        type: LayoutAnimation.Types.linear,
+        property: LayoutAnimation.Properties.opacity
       }
     })
+
     itemsStore.toggleItemCheck(this.props.item.id)
   }
 
