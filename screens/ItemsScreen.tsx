@@ -1,22 +1,32 @@
 import React from "react";
-import { Button, KeyboardAvoidingView, LayoutAnimation, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Alert, Button, KeyboardAvoidingView, LayoutAnimation, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { FontAwesome5 } from '@expo/vector-icons'; 
 
 
 import EditScreenInfo from '../components/EditScreenInfo';
 import CheckList from "../components/CheckList";
 import { itemsStore } from "../store/itemsStore";
+import { useNavigation } from '@react-navigation/native';
+
 
 // lightColor="#eee" darkColor="rgba(255,255,255,0.1)" 
 
 export default function ItemsScreen() {
+  const navigation = useNavigation();
+
   const [searchQuery, setSearchQuery] = React.useState("")
 
   const addItem = () => {
-    console.log(itemsStore.items)
+    if (searchQuery == "") {
+      navigation.navigate('Modal')
+    } else {
+      let success = itemsStore.addItem(searchQuery)
+  
+      if (success) {
+        setSearchQuery("")
+      }
+    }
 
-    itemsStore.addItem(searchQuery)
-    setSearchQuery("")
   }
 
   const onChangeText = (value: string) => {

@@ -50,7 +50,16 @@ class ItemsStore {
   }
 
   addItem(name : string) {
+    // let nameDoesNotExist = this.items.every((item) => {
+    //   item.name !== name
+    // })
+
+    // if (!nameDoesNotExist) {
+    //   return false
+    // }
+
     this.items = [...this.items, new Item(name)]
+    return true
   }
 
   removeItem(id : string) {

@@ -3,7 +3,8 @@ import React, { Component } from 'react';
 import {
   StyleSheet,
   Text,
-  View
+  View,
+  ScrollView
 } from 'react-native';
 import { itemsStore, ItemState } from '../store/itemsStore';
 import Checkbox from 'expo-checkbox';
@@ -20,20 +21,20 @@ export default class CheckList extends Component<CheckListProps> {
   render() {
     console.log(itemsStore.sortedItems)
     return (
-      <View style={styles.container}>
+      <ScrollView style={styles.container}>
         {
           itemsStore.sortedItems.filter((item) => item.name.toLowerCase().indexOf(this.props.query.toLowerCase()) !== -1).map((item) => {
             return <ItemCheckbox item={item} key={item.id}/>
           })
         }
-      </View>
+      </ScrollView>
     );
   }
 }
 
 const styles = StyleSheet.create({
   container: {
-    // flex: 1,
+    flex: 1,
     // justifyContent: 'center',
     // alignItems: 'center',
   },
