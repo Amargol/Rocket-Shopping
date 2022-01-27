@@ -10,6 +10,7 @@ import {
 import { Item, itemsStore, ItemState } from '../store/itemsStore';
 import Checkbox from 'expo-checkbox';
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
+import * as Haptics from 'expo-haptics';
 
 
 interface ItemCheckboxProps {
@@ -34,7 +35,23 @@ export default class ItemCheckbox extends Component<ItemCheckboxProps, ItemCheck
   }
 
   onPress = () => {
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.spring)
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
+
+    LayoutAnimation.configureNext({
+      duration: 100,
+      create: {
+        type: 'linear',
+        property: 'opacity'
+      },
+      update: {
+        type: LayoutAnimation.Types.easeInEaseOut,
+        springDamping: 0.4
+      },
+      delete: {
+        type: 'linear',
+        property: 'opacity'
+      }
+    })
     itemsStore.toggleItemCheck(this.props.item.id)
   }
 
@@ -58,13 +75,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginHorizontal: 10,
     paddingVertical: 5,
-    backgroundColor: "blue"
   },
   txt: {
     color: "white"
   },
   checkbox: {
     width: 30,
-    height: 30
+    height: 30,
+    marginRight: 10
   }
 });
