@@ -1,5 +1,5 @@
 import React from "react";
-import { Alert, Button, KeyboardAvoidingView, LayoutAnimation, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Alert, Button, KeyboardAvoidingView, LayoutAnimation, Pressable, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { FontAwesome5 } from '@expo/vector-icons'; 
 
 
@@ -7,18 +7,19 @@ import EditScreenInfo from '../components/EditScreenInfo';
 import CheckList from "../components/CheckList";
 import { itemsStore } from "../store/itemsStore";
 import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 
 // lightColor="#eee" darkColor="rgba(255,255,255,0.1)" 
 
 export default function ItemsScreen() {
-  const navigation = useNavigation();
+  const navigation = useNavigation<NativeStackNavigationProp<any>>();
 
   const [searchQuery, setSearchQuery] = React.useState("")
 
   const addItem = () => {
     if (searchQuery == "") {
-      navigation.navigate('Modal')
+      navigation.push('Add Item')
     } else {
       let success = itemsStore.addItem(searchQuery)
   
@@ -61,11 +62,11 @@ export default function ItemsScreen() {
           onChangeText={(value) => {onChangeText(value)}}
           clearButtonMode="always"
         />
-        <Pressable onPress={addItem}>
+        <TouchableOpacity onPress={addItem} activeOpacity={.5}>
           <View style={styles.addButton}>
             <FontAwesome5 name="plus" size={28} color="black" />
           </View>
-        </Pressable>
+        </TouchableOpacity>
       </View>
     </KeyboardAvoidingView>
   );

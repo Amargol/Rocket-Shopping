@@ -8,10 +8,11 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import * as React from 'react';
-import { ColorSchemeName, Pressable } from 'react-native';
+import { ColorSchemeName, Pressable, Text } from 'react-native';
 
 import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
+import AddItemScreen from '../screens/AddItemScreen';
 import ItemsScreen from '../screens/ItemsScreen';
 import ModalScreen from '../screens/ModalScreen';
 import NotFoundScreen from '../screens/NotFoundScreen';
@@ -43,6 +44,21 @@ function RootNavigator() {
       <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
       <Stack.Group screenOptions={{ presentation: 'modal' }}>
         <Stack.Screen name="Modal" component={ModalScreen} />
+        <Stack.Screen
+          name="Add Item"
+          component={AddItemScreen}
+          options={({ navigation }) => ({
+            headerLeft: () => (
+              <Pressable
+                onPress={() => navigation.pop()}
+                style={({ pressed }) => ({
+                  opacity: pressed ? 0.5 : 1,
+                })}>
+                <Text style={{color: "#007AFF"}}>Cancel</Text>
+              </Pressable>
+            )
+          })}  
+        />
       </Stack.Group>
     </Stack.Navigator>
   );
