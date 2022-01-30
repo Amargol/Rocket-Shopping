@@ -4,6 +4,7 @@ import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { Alert, Button, KeyboardAvoidingView, Platform, Pressable, StyleSheet, TouchableOpacity } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 import EditScreenInfo from '../components/EditScreenInfo';
 import { Text, View } from '../components/Themed';
@@ -66,7 +67,7 @@ export default function EditItemScreen(props : any) {
   })
 
   return (
-    <KeyboardAvoidingView style={styles.container} behavior={'padding'}>
+    <KeyboardAwareScrollView style={styles.container}>
       <View style={styles.searchContainer}>
         <Text style={styles.headText}>Item Name</Text>
         <TextInput
@@ -94,7 +95,7 @@ export default function EditItemScreen(props : any) {
           <Text style={styles.submitButtonText}>Save</Text>
         </View>
       </TouchableOpacity> */}
-    </KeyboardAvoidingView>
+    </KeyboardAwareScrollView>
   );
 }
 
@@ -136,7 +137,7 @@ const styles = StyleSheet.create({
   notesSearchContainer: {
     margin: 10,
     marginTop: 10,
-    marginBottom: 2,
+    marginBottom: 20,
     overflow: "hidden",
   },
   notesInput: {
