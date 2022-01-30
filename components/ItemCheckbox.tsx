@@ -1,6 +1,7 @@
 import { observer } from 'mobx-react';
 import React, { Component } from 'react';
 import {
+  Dimensions,
   LayoutAnimation,
   Pressable,
   RefreshControl,
@@ -29,6 +30,7 @@ interface ItemCheckboxState {
 
 class ItemCheckboxInner extends Component<ItemCheckboxProps, ItemCheckboxState> {
   openingModal: boolean;
+  width: number;
 
   // shouldComponentUpdate (nextProps : ItemCheckboxProps) {
   //   return this.props.item.state != nextProps.item.state
@@ -41,6 +43,7 @@ class ItemCheckboxInner extends Component<ItemCheckboxProps, ItemCheckboxState> 
       refreshing: false
     }
     this.openingModal = false
+    this.width = Dimensions.get('window').width
   }
 
   onPress = () => {
@@ -89,9 +92,8 @@ class ItemCheckboxInner extends Component<ItemCheckboxProps, ItemCheckboxState> 
         }}
         scrollEventThrottle={16}
       >
-
         <Pressable onPress={this.onPress}>
-          <View style={styles.container}>
+          <View style={[styles.container, {maxWidth: this.width - 50}]}>
             <Checkbox style={styles.checkbox} value={item.state == ItemState.Checked} onValueChange={this.onPress}/>
             <Text style={styles.txt}>{this.props.item.name}</Text>
           </View>
