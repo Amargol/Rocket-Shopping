@@ -92,8 +92,8 @@ class ItemCheckboxInner extends Component<ItemCheckboxProps, ItemCheckboxState> 
         }}
         scrollEventThrottle={16}
       >
-        <Pressable onPress={this.onPress}>
-          <View style={[styles.container, {maxWidth: this.width - 50}]}>
+        <Pressable onPress={this.onPress} style={{width: this.width - 40}}>
+          <View style={styles.container}>
             <Checkbox style={styles.checkbox} value={item.state == ItemState.Checked} onValueChange={this.onPress}/>
             <Text style={styles.txt}>{this.props.item.name}</Text>
           </View>

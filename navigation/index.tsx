@@ -63,26 +63,6 @@ function RootNavigator() {
         <Stack.Screen
           name="Edit Item"
           component={EditItemScreen}
-          options={({ navigation }) => ({
-            headerLeft: () => (
-              <Pressable
-                onPress={() => navigation.pop()}
-                style={({ pressed }) => ({
-                  opacity: pressed ? 0.5 : 1,
-                })}>
-                <Text style={{color: "#007AFF"}}>Cancel</Text>
-              </Pressable>
-            ),
-            headerRight: () => (
-              <Pressable
-                onPress={() => navigation.pop()}
-                style={({ pressed }) => ({
-                  opacity: pressed ? 0.5 : 1,
-                })}>
-                <Text style={{color: "#007AFF"}}>Save</Text>
-              </Pressable>
-            )
-          })}  
         />
       </Stack.Group>
     </Stack.Navigator>

@@ -2,7 +2,7 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { Button, Platform, Pressable, StyleSheet, TouchableOpacity } from 'react-native';
+import { Alert, Button, Platform, Pressable, StyleSheet, TouchableOpacity } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 
 import EditScreenInfo from '../components/EditScreenInfo';
@@ -13,10 +13,57 @@ export default function EditItemScreen(props : any) {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
 
   const [text, onChangeText] = React.useState(props.route.params.item.name);
+  const [botes, onChangeNotes] = React.useState(props.route.params.item.notes);
 
   const onSubmit = () => {
-    navigation.pop()
+    if (text === "") {
+      Alert.alert(
+        "Invalid Item",
+        "Item must have a name",
+        [
+          {
+            text: "Cancel",
+            style: "cancel"
+          }
+        ]
+      )
+    } else {
+      navigation.pop()
+    }
   }
+
+  navigation.addListener("beforeRemove", (e) => {
+    if (text !== "") {
+      saveNotes()
+    }
+  })
+
+  const saveNotes = () => {
+    console.log("hi")
+  }
+
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerLeft: () => (
+        <Pressable
+          onPress={() => navigation.pop()}
+          style={({ pressed }) => ({
+            opacity: pressed ? 0.5 : 1,
+          })}>
+          <Text style={{color: "#007AFF"}}>Cancel</Text>
+        </Pressable>
+      ),
+      headerRight: () => (
+        <Pressable
+          onPress={() => onSubmit()}
+          style={({ pressed }) => ({
+            opacity: pressed ? 0.5 : 1,
+          })}>
+          <Text style={{color: "#007AFF"}}>Save</Text>
+        </Pressable>
+      )
+    })
+  })
 
   return (
     <View style={styles.container}>
