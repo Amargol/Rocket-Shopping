@@ -58,6 +58,10 @@ class ItemsStore {
     //   return false
     // }
 
+    if (name === "") {
+      return false
+    }
+
     this.items = [...this.items, new Item(name)]
     return true
   }

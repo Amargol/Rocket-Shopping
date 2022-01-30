@@ -13,6 +13,7 @@ import { ColorSchemeName, Pressable, Text } from 'react-native';
 import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
 import AddItemScreen from '../screens/AddItemScreen';
+import EditItemScreen from '../screens/EditItemScreen';
 import ItemsScreen from '../screens/ItemsScreen';
 import ModalScreen from '../screens/ModalScreen';
 import NotFoundScreen from '../screens/NotFoundScreen';
@@ -55,6 +56,30 @@ function RootNavigator() {
                   opacity: pressed ? 0.5 : 1,
                 })}>
                 <Text style={{color: "#007AFF"}}>Cancel</Text>
+              </Pressable>
+            )
+          })}  
+        />
+        <Stack.Screen
+          name="Edit Item"
+          component={EditItemScreen}
+          options={({ navigation }) => ({
+            headerLeft: () => (
+              <Pressable
+                onPress={() => navigation.pop()}
+                style={({ pressed }) => ({
+                  opacity: pressed ? 0.5 : 1,
+                })}>
+                <Text style={{color: "#007AFF"}}>Cancel</Text>
+              </Pressable>
+            ),
+            headerRight: () => (
+              <Pressable
+                onPress={() => navigation.pop()}
+                style={({ pressed }) => ({
+                  opacity: pressed ? 0.5 : 1,
+                })}>
+                <Text style={{color: "#007AFF"}}>Save</Text>
               </Pressable>
             )
           })}  

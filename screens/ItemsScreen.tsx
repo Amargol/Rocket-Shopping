@@ -1,5 +1,5 @@
 import React from "react";
-import { Alert, Button, KeyboardAvoidingView, LayoutAnimation, Pressable, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Alert, Button, Keyboard, KeyboardAvoidingView, LayoutAnimation, Pressable, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { FontAwesome5 } from '@expo/vector-icons'; 
 
 
@@ -16,18 +16,34 @@ export default function ItemsScreen() {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
 
   const [searchQuery, setSearchQuery] = React.useState("")
+  let isKeyboardOpen = false
+
+
+  const keyboardDidShowListener = Keyboard.addListener(
+    'keyboardDidShow',
+    () => {
+      isKeyboardOpen = true
+    }
+  );
+  const keyboardDidHideListener = Keyboard.addListener(
+    'keyboardDidHide',
+    () => {
+      isKeyboardOpen = false
+    }
+  );
+
 
   const addItem = () => {
-    if (searchQuery == "") {
+    if (searchQuery == "" && !isKeyboardOpen) {
       navigation.push('Add Item')
     } else {
       let success = itemsStore.addItem(searchQuery)
   
       if (success) {
         setSearchQuery("")
+        Keyboard.dismiss()
       }
     }
-
   }
 
   const onChangeText = (value: string) => {
@@ -51,7 +67,7 @@ export default function ItemsScreen() {
 
   return (
     <KeyboardAvoidingView style={styles.container} behavior="padding" keyboardVerticalOffset={88}>
-      <View style={styles.container}>
+      <View style={[styles.container, {marginTop: 10}]}>
         <CheckList query={searchQuery} />
       </View>
       <View style={styles.searchContainer}>

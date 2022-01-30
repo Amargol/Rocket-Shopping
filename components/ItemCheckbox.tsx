@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import {
   LayoutAnimation,
   Pressable,
+  RefreshControl,
   StyleSheet,
   Text,
   View
@@ -11,18 +12,24 @@ import { Item, itemsStore, ItemState } from '../store/itemsStore';
 import Checkbox from 'expo-checkbox';
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
 import * as Haptics from 'expo-haptics';
+import { ScrollView } from 'react-native-gesture-handler';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 
 interface ItemCheckboxProps {
   item : Item,
+  navigation : NativeStackNavigationProp<any, string>
 }
 
 interface ItemCheckboxState {
-  isChecked : boolean
+  isChecked : boolean,
+  refreshing: boolean
 }
 
-export default class ItemCheckbox extends Component<ItemCheckboxProps, ItemCheckboxState> {
-  
+class ItemCheckboxInner extends Component<ItemCheckboxProps, ItemCheckboxState> {
+  openingModal: boolean;
+
   // shouldComponentUpdate (nextProps : ItemCheckboxProps) {
   //   return this.props.item.state != nextProps.item.state
   // }
@@ -30,8 +37,10 @@ export default class ItemCheckbox extends Component<ItemCheckboxProps, ItemCheck
   constructor(props : ItemCheckboxProps) {
     super(props);
     this.state = {
-      isChecked: false
+      isChecked: false,
+      refreshing: false
     }
+    this.openingModal = false
   }
 
   onPress = () => {
@@ -55,18 +64,45 @@ export default class ItemCheckbox extends Component<ItemCheckboxProps, ItemCheck
     itemsStore.toggleItemCheck(this.props.item.id)
   }
 
+  onRefresh = () => {
+    this.setState({refreshing: false})
+  }
+
   render() {
     let item = this.props.item
 
     return (
-      <Pressable onPress={this.onPress}>
-        <View style={styles.container}>
-          <Checkbox style={styles.checkbox} value={item.state == ItemState.Checked} onValueChange={this.onPress}/>
-          <Text style={styles.txt}>{this.props.item.name}</Text>
-        </View>
-      </Pressable>
+      <ScrollView
+        horizontal={true}
+        onScroll={(e) => {
+          const xOffset = e.nativeEvent.contentOffset.x;
+          if (xOffset < -30 && !this.openingModal) {
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
+            this.openingModal = true
+            this.props.navigation.push("Edit Item")
+          }
+          if (xOffset == 0 && this.openingModal) {
+            this.openingModal = false
+          }
+        }}
+        scrollEventThrottle={16}
+      >
+
+        <Pressable onPress={this.onPress}>
+          <View style={styles.container}>
+            <Checkbox style={styles.checkbox} value={item.state == ItemState.Checked} onValueChange={this.onPress}/>
+            <Text style={styles.txt}>{this.props.item.name}</Text>
+          </View>
+        </Pressable>
+      </ScrollView>
     );
   }
+}
+
+export default function ItemCheckbox(props : any) {
+  const navigation = useNavigation<NativeStackNavigationProp<any>>();
+
+  return <ItemCheckboxInner {...props} navigation={navigation} />
 }
 
 const styles = StyleSheet.create({
