@@ -19,7 +19,6 @@ interface CheckListProps {
 export default class CheckList extends Component<CheckListProps> {
 
   render() {
-    console.log(itemsStore.sortedItems)
     return (
       <ScrollView style={styles.container}>
         {

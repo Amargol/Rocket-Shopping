@@ -2,7 +2,7 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { Alert, Button, Platform, Pressable, StyleSheet, TouchableOpacity } from 'react-native';
+import { Alert, Button, KeyboardAvoidingView, Platform, Pressable, StyleSheet, TouchableOpacity } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 
 import EditScreenInfo from '../components/EditScreenInfo';
@@ -66,17 +66,15 @@ export default function EditItemScreen(props : any) {
   })
 
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView style={styles.container} behavior={'padding'}>
       <View style={styles.searchContainer}>
         <Text style={styles.headText}>Item Name</Text>
         <TextInput
           // placeholder="Item Name"
           autoFocus={false}
           style={styles.input}
-          returnKeyType="done"
           onChangeText={onChangeText}
           value={text}
-          onSubmitEditing={onSubmit}
         />
       </View>
       <View style={styles.notesSearchContainer}>
@@ -87,6 +85,7 @@ export default function EditItemScreen(props : any) {
           autoFocus={false}
           style={styles.notesInput}
           multiline={true}
+          scrollEnabled={false}
         />
       </View>
 
@@ -95,7 +94,7 @@ export default function EditItemScreen(props : any) {
           <Text style={styles.submitButtonText}>Save</Text>
         </View>
       </TouchableOpacity> */}
-    </View>
+    </KeyboardAvoidingView>
   );
 }
 

@@ -66,7 +66,7 @@ export default function ItemsScreen() {
   }
 
   return (
-    <KeyboardAvoidingView style={styles.container} behavior="padding" keyboardVerticalOffset={88}>
+    <KeyboardAvoidingView style={styles.container} behavior="padding" keyboardVerticalOffset={90}>
       <View style={[styles.container, {marginTop: 10}]}>
         <CheckList query={searchQuery} />
       </View>
