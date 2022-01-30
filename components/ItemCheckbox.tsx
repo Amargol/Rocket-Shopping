@@ -79,7 +79,9 @@ class ItemCheckboxInner extends Component<ItemCheckboxProps, ItemCheckboxState> 
           if (xOffset < -30 && !this.openingModal) {
             Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
             this.openingModal = true
-            this.props.navigation.push("Edit Item")
+            this.props.navigation.push("Edit Item", {
+              item: item
+            })
           }
           if (xOffset == 0 && this.openingModal) {
             this.openingModal = false
