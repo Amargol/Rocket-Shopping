@@ -50,6 +50,7 @@ export default function EditItemScreen(props : any) {
       headerLeft: () => (
         <Pressable
           onPress={() => navigation.pop()}
+          hitSlop={50}
           style={({ pressed }) => ({
             opacity: pressed ? 0.5 : 1,
           })}>

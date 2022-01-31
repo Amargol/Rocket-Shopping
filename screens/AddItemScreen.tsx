@@ -2,7 +2,7 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { Button, Platform, Pressable, StyleSheet, TouchableOpacity } from 'react-native';
+import { Alert, Button, Platform, Pressable, StyleSheet, TouchableOpacity } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 
 import EditScreenInfo from '../components/EditScreenInfo';
@@ -13,10 +13,24 @@ export default function AddItemScreen() {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
 
   const [text, onChangeText] = React.useState("");
+  const [notes, onChangeNotes] = React.useState("");
 
   const onSubmit = () => {
-    itemsStore.addItem(text, "")
-    navigation.pop()
+    if (text === "") {
+      Alert.alert(
+        "Invalid Item",
+        "Item must have a name",
+        [
+          {
+            text: "Cancel",
+            style: "cancel"
+          }
+        ]
+      )
+    } else {
+      itemsStore.addItem(text, notes)
+      navigation.pop()
+    }
   }
 
   return (
@@ -31,6 +45,18 @@ export default function AddItemScreen() {
           value={text}
           clearButtonMode="always"
           onSubmitEditing={onSubmit}
+        />
+      </View>
+      <View style={styles.notesSearchContainer}>
+        <TextInput
+          placeholder="Notes"
+          placeholderTextColor={"#616164"}
+          autoFocus={false}
+          style={styles.notesInput}
+          multiline={true}
+          scrollEnabled={false}
+          value={notes}
+          onChangeText={onChangeNotes}
         />
       </View>
       <TouchableOpacity activeOpacity={.8} onPress={onSubmit}>
@@ -70,6 +96,21 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center"
   },
+  notesSearchContainer: {
+    margin: 10,
+    marginTop: 10,
+    // marginBottom: 30,
+    overflow: "hidden",
+  },
+  notesInput: {
+    borderRadius: 4,
+    backgroundColor: "#252526",
+    paddingTop: 10,
+    paddingBottom: 10,
+    fontSize: 20,
+    paddingHorizontal: 12,
+    color: "#eee",
+  },
   input: {
     flex: 1,
     height: "100%",
@@ -79,6 +120,7 @@ const styles = StyleSheet.create({
   },
   submitButtonContainer: {
     margin: 10,
+    marginTop: 4,
     borderRadius: 4,
     overflow: "hidden",
     backgroundColor: "#23A9DD",
