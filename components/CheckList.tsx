@@ -20,7 +20,7 @@ export default class CheckList extends Component<CheckListProps> {
 
   render() {
     return (
-      <ScrollView style={styles.container}>
+      <ScrollView style={styles.container} keyboardShouldPersistTaps={true}>
         {
           itemsStore.sortedItems.filter((item) => item.name.toLowerCase().indexOf(this.props.query.toLowerCase()) !== -1).map((item) => {
             return <ItemCheckbox item={item} key={item.id}/>

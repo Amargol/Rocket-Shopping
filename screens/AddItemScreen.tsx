@@ -35,7 +35,7 @@ export default function AddItemScreen() {
   }
 
   return (
-    <KeyboardAwareScrollView style={styles.container} keyboardShouldPersistTaps={"always"}>
+    <KeyboardAwareScrollView style={styles.container} keyboardShouldPersistTaps={"always"} bounces={false}>
       <View style={styles.searchContainer}>
         <TextInput
           placeholder="Item Name"
