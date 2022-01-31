@@ -1,5 +1,5 @@
 import { FontAwesome } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
@@ -18,6 +18,17 @@ export default function EditItemScreen(props : any) {
   const [notes, onChangeNotes] = React.useState(props.route.params.item.notes);
   const [editing, onChangeEditing] = React.useState(false);
 
+
+  React.useEffect(() => {
+    const unSubs = [
+      navigation.addListener('blur', () => {
+        if (text !== "") {
+          saveNotes()
+        }
+      })
+    ]
+  }, [])  
+
   const onSubmit = () => {
     if (text === "") {
       Alert.alert(
@@ -35,11 +46,10 @@ export default function EditItemScreen(props : any) {
     }
   }
 
-  navigation.addListener("beforeRemove", (e) => {
-    if (text !== "") {
-      saveNotes()
-    }
-  })
+  const onPressSave = () => {
+    console.log("asnisafpij")
+    onChangeEditing(!editing)
+  }
 
   const saveNotes = () => {
     console.log("hi")
@@ -59,10 +69,7 @@ export default function EditItemScreen(props : any) {
       ),
       headerRight: () => (
         <Pressable
-          onPress={() => {
-            onChangeEditing(!editing)
-            // Check if 
-          }}
+          onPress={onPressSave}
           style={({ pressed }) => ({
             opacity: pressed ? 0.5 : 1,
           })}>
@@ -88,7 +95,7 @@ export default function EditItemScreen(props : any) {
       <View style={styles.notesSearchContainer}>
         <View style={{display: 'flex', flexDirection: "row"}}>
           <Text style={styles.headText}>Notes</Text>
-          <Pressable onPress={() => {onChangeEditing(!editing)}}><Text style={[styles.headText, {color: "#007AFF"}]}>{editing ? "Save" : "Edit"}</Text></Pressable>
+          <Pressable onPress={onPressSave}><Text style={[styles.headText, {color: "#007AFF"}]}>{editing ? "Save" : "Edit"}</Text></Pressable>
         </View>
         <TextInput
           // placeholder="Notes"
