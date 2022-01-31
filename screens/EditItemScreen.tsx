@@ -1,8 +1,9 @@
+import { FontAwesome } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { Alert, Button, KeyboardAvoidingView, Platform, Pressable, StyleSheet, TouchableOpacity } from 'react-native';
+import { Alert, Button, KeyboardAvoidingView, Platform, Pressable, SafeAreaView, StyleSheet, TouchableOpacity } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
@@ -52,23 +53,26 @@ export default function EditItemScreen(props : any) {
           style={({ pressed }) => ({
             opacity: pressed ? 0.5 : 1,
           })}>
-          <Text style={{color: "#007AFF"}}>Cancel</Text>
+          <Text style={{color: "#007AFF"}}>Go Back</Text>
         </Pressable>
       ),
       headerRight: () => (
         <Pressable
-          onPress={() => onSubmit()}
+          onPress={() => {
+            onChangeEditing(!editing)
+            // Check if 
+          }}
           style={({ pressed }) => ({
             opacity: pressed ? 0.5 : 1,
           })}>
-          <Text style={{color: "#007AFF"}}>Save</Text>
+          <Text style={{color: "#007AFF"}}>{editing ? "Save" : "Edit"}</Text>
         </Pressable>
       )
     })
   })
 
   return (
-    <KeyboardAwareScrollView style={styles.container}>
+    <KeyboardAwareScrollView style={styles.container} bounces={false}>
       <View style={styles.searchContainer}>
         <Text style={styles.headText}>Item Name</Text>
         <TextInput
@@ -77,6 +81,7 @@ export default function EditItemScreen(props : any) {
           style={styles.input}
           onChangeText={onChangeText}
           value={text}
+          editable={editing}
         />
       </View>
       <View style={styles.notesSearchContainer}>
@@ -143,7 +148,7 @@ const styles = StyleSheet.create({
   notesSearchContainer: {
     margin: 10,
     marginTop: 10,
-    marginBottom: 20,
+    marginBottom: 100,
     overflow: "hidden",
   },
   notesInput: {
