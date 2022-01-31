@@ -37,7 +37,7 @@ export default function ItemsScreen() {
     if (searchQuery == "" && !isKeyboardOpen) {
       navigation.push('Add Item')
     } else {
-      let success = itemsStore.addItem(searchQuery)
+      let success = itemsStore.addItem(searchQuery, "")
   
       if (success) {
         setSearchQuery("")

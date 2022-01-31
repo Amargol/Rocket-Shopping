@@ -148,7 +148,7 @@ const styles = StyleSheet.create({
   notesSearchContainer: {
     margin: 10,
     marginTop: 10,
-    marginBottom: 100,
+    marginBottom: 30,
     overflow: "hidden",
   },
   notesInput: {

@@ -15,7 +15,7 @@ export default function AddItemScreen() {
   const [text, onChangeText] = React.useState("");
 
   const onSubmit = () => {
-    itemsStore.addItem(text)
+    itemsStore.addItem(text, "")
     navigation.pop()
   }
 

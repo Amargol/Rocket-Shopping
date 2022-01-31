@@ -14,19 +14,18 @@ export class Item {
   notes: string
   id: string
 
-  constructor (name : string) {
+  constructor (name : string, notes : string) {
     this.name = name
     this.isChecked = false
     this.isDisabled = false
-    this.notes = ""
+    this.notes = notes
     this.id = Date.now().toString() + "_" + ((Math.random() * 1000000) >> 0).toString()
   }
 
   static clone (item : Item) : Item {
-    let res = new Item(item.name)
+    let res = new Item(item.name, item.notes)
     res.isChecked = item.isChecked
     res.isDisabled = item.isDisabled
-    res.notes = item.notes
     res.id = item.id
 
     return res
@@ -46,13 +45,13 @@ class ItemsStore {
       sortedItems: computed
     })
 
-    this.addItem("one")
-    this.addItem("two")
-    this.addItem("three")
-    this.addItem("four")
+    this.addItem("one", "ok\nasok\nok\nasok\nok\nasok\nok\nasok\nok\nasok\nok\nasok\nok\nasok\nok\nasok\nok\nasok\nok\nasok\nok\nasok\n\n\n\n\n\n\n\na\n\n\na\n\n\n\n\na")
+    this.addItem("two", "")
+    this.addItem("three", "")
+    this.addItem("four", "")
   }
 
-  addItem(name : string) {
+  addItem(name : string, notes : string) {
     // let nameDoesNotExist = this.items.every((item) => {
     //   item.name !== name
     // })
@@ -65,7 +64,7 @@ class ItemsStore {
       return false
     }
 
-    this.items = [...this.items, new Item(name)]
+    this.items = [...this.items, new Item(name, notes)]
     return true
   }
 
