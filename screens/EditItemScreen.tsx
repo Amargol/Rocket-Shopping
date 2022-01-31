@@ -14,7 +14,8 @@ export default function EditItemScreen(props : any) {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
 
   const [text, onChangeText] = React.useState(props.route.params.item.name);
-  const [botes, onChangeNotes] = React.useState(props.route.params.item.notes);
+  const [notes, onChangeNotes] = React.useState(props.route.params.item.notes);
+  const [editing, onChangeEditing] = React.useState(false);
 
   const onSubmit = () => {
     if (text === "") {
@@ -79,17 +80,22 @@ export default function EditItemScreen(props : any) {
         />
       </View>
       <View style={styles.notesSearchContainer}>
-        <Text style={styles.headText}>Notes</Text>
+        <View style={{display: 'flex', flexDirection: "row"}}>
+          <Text style={styles.headText}>Notes</Text>
+          <Pressable onPress={() => {onChangeEditing(!editing)}}><Text style={[styles.headText, {color: "#007AFF"}]}>{editing ? "Save" : "Edit"}</Text></Pressable>
+        </View>
         <TextInput
           // placeholder="Notes"
           placeholderTextColor={"#616164"}
           autoFocus={false}
+          editable={editing}
           style={styles.notesInput}
           multiline={true}
           scrollEnabled={false}
+          value={notes}
+          onChangeText={onChangeNotes}
         />
       </View>
-
       {/* <TouchableOpacity activeOpacity={.8} onPress={onSubmit}>
         <View style={styles.submitButtonContainer}>
           <Text style={styles.submitButtonText}>Save</Text>
