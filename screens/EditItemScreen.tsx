@@ -14,8 +14,9 @@ import { Item, itemsStore } from '../store/itemsStore';
 export default function EditItemScreen(props : any) {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
 
-  const [text, onChangeText] = React.useState(props.route.params.item.name);
-  const [notes, onChangeNotes] = React.useState(props.route.params.item.notes);
+  const item : Item = props.route.params.item
+  const [text, onChangeText] = React.useState(item.name);
+  const [notes, onChangeNotes] = React.useState(item.notes);
   const [editing, onChangeEditing] = React.useState(false);
 
   // navigation.addListener('blur', () => {
@@ -45,7 +46,7 @@ export default function EditItemScreen(props : any) {
   }
 
   const saveNotes = () => {
-    console.log("SAVE", text)
+    itemsStore.updateItem(item.id, text, notes)
   }
 
   React.useLayoutEffect(() => {

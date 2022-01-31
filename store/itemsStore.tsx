@@ -84,6 +84,19 @@ class ItemsStore {
     })
   }
 
+  updateItem(id : string, name : string, notes : string) {
+    this.items = this.items.map((item) => {
+      if (item.id == id) {
+        let newItem = Item.clone(item)
+        newItem.name = name
+        newItem.notes = notes
+        return newItem
+      }
+
+      return item
+    })
+  }
+
   get count() {
     return this.items.length
   }
