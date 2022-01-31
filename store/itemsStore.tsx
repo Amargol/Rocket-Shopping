@@ -9,20 +9,23 @@ export enum ItemState {
 
 export class Item {
   name: string
-  state: ItemState
+  isChecked: boolean
+  isDisabled: boolean
   notes: string
   id: string
 
   constructor (name : string) {
     this.name = name
-    this.state = ItemState.Unchecked
+    this.isChecked = false
+    this.isDisabled = false
     this.notes = ""
     this.id = Date.now().toString() + "_" + ((Math.random() * 1000000) >> 0).toString()
   }
 
   static clone (item : Item) : Item {
     let res = new Item(item.name)
-    res.state = item.state
+    res.isChecked = item.isChecked
+    res.isDisabled = item.isDisabled
     res.notes = item.notes
     res.id = item.id
 
@@ -74,7 +77,7 @@ class ItemsStore {
     this.items = this.items.map((item) => {
       if (item.id == id) {
         let newItem = Item.clone(item)
-        newItem.state = item.state == ItemState.Checked ? ItemState.Unchecked : ItemState.Checked
+        newItem.isChecked = !item.isChecked
         return newItem
       }
 
@@ -88,7 +91,11 @@ class ItemsStore {
 
   get sortedItems() {
     return this.items.concat().sort((a, b) => {
-      return a.state - b.state
+      if (a.isChecked == b.isChecked) {
+        return 0
+      } else {
+        return a.isChecked ? 1 : -1
+      }
     })
   }
 }

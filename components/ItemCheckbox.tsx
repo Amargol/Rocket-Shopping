@@ -94,7 +94,7 @@ class ItemCheckboxInner extends Component<ItemCheckboxProps, ItemCheckboxState> 
       >
         <Pressable onPress={this.onPress} style={{width: this.width - 40}}>
           <View style={styles.container}>
-            <Checkbox style={styles.checkbox} value={item.state == ItemState.Checked} onValueChange={this.onPress}/>
+            <Checkbox style={styles.checkbox} value={item.isChecked} onValueChange={this.onPress}/>
             <Text style={styles.txt}>{this.props.item.name}</Text>
           </View>
         </Pressable>
