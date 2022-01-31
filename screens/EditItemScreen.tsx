@@ -73,14 +73,16 @@ export default function EditItemScreen(props : any) {
     })
   })
 
+  let inputBackground = editing ? "#252526" : "#0f0f0f"
+
   return (
-    <KeyboardAwareScrollView style={styles.container} bounces={false} keyboardShouldPersistTaps={'always'}>
+    <KeyboardAwareScrollView style={styles.container} bounces={editing} keyboardShouldPersistTaps={'always'}>
       <View style={styles.searchContainer}>
         <Text style={styles.headText}>Item Name</Text>
         <TextInput
           // placeholder="Item Name"
           autoFocus={false}
-          style={styles.input}
+          style={[styles.input, {backgroundColor: inputBackground}]}
           onChangeText={onChangeText}
           value={text}
           editable={editing}
@@ -96,7 +98,7 @@ export default function EditItemScreen(props : any) {
           placeholderTextColor={"#616164"}
           autoFocus={false}
           editable={editing}
-          style={styles.notesInput}
+          style={[styles.notesInput, {backgroundColor: inputBackground}]}
           multiline={true}
           scrollEnabled={false}
           value={notes}
@@ -166,7 +168,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     marginBottom: 5,
     color: "#8E8E92",
-    paddingLeft: 9
+    paddingLeft: 10
   },
   submitButtonContainer: {
     margin: 10,

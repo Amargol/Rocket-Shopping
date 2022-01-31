@@ -41,6 +41,7 @@ class ItemsStore {
       addItem: action,
       removeItem: action,
       toggleItemCheck: action,
+      updateItem: action,
       count: computed,
       sortedItems: computed
     })
