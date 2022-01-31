@@ -18,18 +18,13 @@ export default function EditItemScreen(props : any) {
   const [notes, onChangeNotes] = React.useState(props.route.params.item.notes);
   const [editing, onChangeEditing] = React.useState(false);
 
+  // navigation.addListener('blur', () => {
+  //   if (text !== "") {
+  //     saveNotes()
+  //   }
+  // })
 
-  React.useEffect(() => {
-    const unSubs = [
-      navigation.addListener('blur', () => {
-        if (text !== "") {
-          saveNotes()
-        }
-      })
-    ]
-  }, [])  
-
-  const onSubmit = () => {
+  const onPressSave = () => {
     if (text === "") {
       Alert.alert(
         "Invalid Item",
@@ -42,17 +37,15 @@ export default function EditItemScreen(props : any) {
         ]
       )
     } else {
-      navigation.pop()
+      if (editing) {
+        saveNotes()
+      }
+      onChangeEditing(!editing)
     }
   }
 
-  const onPressSave = () => {
-    console.log("asnisafpij")
-    onChangeEditing(!editing)
-  }
-
   const saveNotes = () => {
-    console.log("hi")
+    console.log("SAVE", text)
   }
 
   React.useLayoutEffect(() => {
@@ -80,7 +73,7 @@ export default function EditItemScreen(props : any) {
   })
 
   return (
-    <KeyboardAwareScrollView style={styles.container} bounces={false}>
+    <KeyboardAwareScrollView style={styles.container} bounces={false} keyboardShouldPersistTaps={'always'}>
       <View style={styles.searchContainer}>
         <Text style={styles.headText}>Item Name</Text>
         <TextInput

@@ -4,6 +4,7 @@ import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { Alert, Button, Platform, Pressable, StyleSheet, TouchableOpacity } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 import EditScreenInfo from '../components/EditScreenInfo';
 import { Text, View } from '../components/Themed';
@@ -34,7 +35,7 @@ export default function AddItemScreen() {
   }
 
   return (
-    <View style={styles.container}>
+    <KeyboardAwareScrollView style={styles.container} keyboardShouldPersistTaps={"always"}>
       <View style={styles.searchContainer}>
         <TextInput
           placeholder="Item Name"
@@ -64,7 +65,7 @@ export default function AddItemScreen() {
           <Text style={styles.submitButtonText}>Submit</Text>
         </View>
       </TouchableOpacity>
-    </View>
+    </KeyboardAwareScrollView>
   );
 }
 
