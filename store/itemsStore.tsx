@@ -49,6 +49,7 @@ class ItemsStore {
       addItem: action,
       removeItem: action,
       toggleItemCheck: action,
+      moveItem: action,
       updateItem: action,
       count: computed,
       sortedItems: computed
@@ -91,6 +92,35 @@ class ItemsStore {
     })
 
     this.saveToStore()
+  }
+
+  moveItem (id : string, distance : number) {
+    let i = this.items.findIndex((item) => {
+      return item.id == id
+    })
+
+    if (i == -1) {
+      return false
+    }
+
+    if (i + distance < 0) {
+      distance = 0 - i
+    }
+
+    if (i + distance >= this.items.length) {
+      distance = this.items.length - i
+    }
+
+    let temp = this.items[i]
+    let res = this.items.filter((item, index) => index !== i)
+
+    res.splice(i + distance, 0, temp)
+
+    this.items = res
+
+    this.saveToStore()
+
+    return true
   }
 
   updateItem(id : string, name : string, notes : string) {

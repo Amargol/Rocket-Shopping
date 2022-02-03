@@ -6,6 +6,7 @@ import { Alert, Button, Platform, Pressable, StyleSheet, TouchableOpacity, TextI
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 import EditScreenInfo from '../components/EditScreenInfo';
+import SortableList from '../components/SortableList';
 import { Text, View } from '../components/Themed';
 import { itemsStore } from '../store/itemsStore';
 
@@ -64,6 +65,8 @@ export default function AddItemScreen() {
           <Text style={styles.submitButtonText}>Submit</Text>
         </View>
       </TouchableOpacity>
+      <SortableList />
+      <View style={styles.separator}></View>
     </KeyboardAwareScrollView>
   );
 }
