@@ -78,7 +78,7 @@ class ItemsStore {
       return false
     }
 
-    this.items = [...this.items, new Item(name, notes)]
+    this.items = [new Item(name, notes), ...this.items]
     this.saveToStore()
     return true
   }
