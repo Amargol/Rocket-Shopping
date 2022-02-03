@@ -7,13 +7,13 @@ import {
   RefreshControl,
   StyleSheet,
   Text,
-  View
+  View,
+  ScrollView
 } from 'react-native';
 import { Item, itemsStore, ItemState } from '../store/itemsStore';
 import Checkbox from 'expo-checkbox';
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
 import * as Haptics from 'expo-haptics';
-import { ScrollView } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 

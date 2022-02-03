@@ -1,5 +1,5 @@
 import { action, computed, makeObservable, observable } from "mobx"
-import { LayoutAnimation } from "react-native"
+import { AsyncStorage, LayoutAnimation } from "react-native"
 
 export enum ItemState {
   Unchecked = 0,
@@ -36,6 +36,14 @@ class ItemsStore {
   items : Item[] = []
 
   constructor () {
+    AsyncStorage.getItem("items").then(items => {
+      if (items !== null) {
+        this.items = JSON.parse(items)
+      } else {
+        this.items = []
+      }
+    });
+
     makeObservable(this, {
       items: observable,
       addItem: action,
@@ -45,11 +53,6 @@ class ItemsStore {
       count: computed,
       sortedItems: computed
     })
-
-    this.addItem("one", "ok\nasok\nok\nasok\nok\nasok\nok\nasok\nok\nasok\nok\nasok\nok\nasok\nok\nasok\nok\nasok\nok\nasok\nok\nasok\n\n\n\n\n\n\n\na\n\n\na\n\n\n\n\na")
-    this.addItem("two", "")
-    this.addItem("three", "")
-    this.addItem("four", "")
   }
 
   addItem(name : string, notes : string) {
@@ -66,11 +69,14 @@ class ItemsStore {
     }
 
     this.items = [...this.items, new Item(name, notes)]
+    this.saveToStore()
     return true
   }
 
   removeItem(id : string) {
     this.items.filter(item => item.id != id)
+
+    this.saveToStore()
   }
 
   toggleItemCheck(id : string) {
@@ -83,6 +89,8 @@ class ItemsStore {
 
       return item
     })
+
+    this.saveToStore()
   }
 
   updateItem(id : string, name : string, notes : string) {
@@ -96,6 +104,8 @@ class ItemsStore {
 
       return item
     })
+
+    this.saveToStore()
   }
 
   get count() {
@@ -110,6 +120,10 @@ class ItemsStore {
         return a.isChecked ? 1 : -1
       }
     })
+  }
+
+  saveToStore() {
+    AsyncStorage.setItem("items", JSON.stringify(this.items));
   }
 }
 
