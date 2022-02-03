@@ -71,6 +71,11 @@ export default function ItemsScreen() {
         <CheckList query={searchQuery} />
       </View>
       <View style={styles.searchContainer}>
+        <TouchableOpacity onPress={addItem} activeOpacity={.5}>
+          <View style={styles.addButton}>
+            <FontAwesome5 name="plus" size={28} color="#23A9DD" />
+          </View>
+        </TouchableOpacity>
         <TextInput
           placeholder="Search or Add Item"
           style={styles.input}
@@ -80,7 +85,7 @@ export default function ItemsScreen() {
         />
         <TouchableOpacity onPress={addItem} activeOpacity={.5}>
           <View style={styles.addButton}>
-            <FontAwesome5 name="plus" size={28} color="black" />
+            <FontAwesome5 name="check" size={28} color="#23A9DD" />
           </View>
         </TouchableOpacity>
       </View>
@@ -106,15 +111,13 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     borderRadius: 4,
     overflow: "hidden",
-    backgroundColor: "#252526",
     display: "flex",
     flexDirection: "row",
     alignItems: "center"
   },
   addButton: {
-    backgroundColor: "#23A9DD",
+    backgroundColor: "black",
     padding: 12,
-    marginLeft: 5
   },
   input: {
     flex: 1,
@@ -123,6 +126,8 @@ const styles = StyleSheet.create({
     padding: 10,
     paddingLeft: 15,
     color: "#eee",
+    backgroundColor: "#252526",
+    borderRadius: 4
   },
   separator: {
     marginVertical: 30,
