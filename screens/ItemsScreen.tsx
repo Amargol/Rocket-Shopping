@@ -41,7 +41,6 @@ export default function ItemsScreen() {
   
       if (success) {
         setSearchQuery("")
-        Keyboard.dismiss()
       }
     }
   }

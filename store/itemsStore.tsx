@@ -1,5 +1,5 @@
 import { action, computed, makeObservable, observable } from "mobx"
-import { AsyncStorage, LayoutAnimation } from "react-native"
+import { Alert, AsyncStorage, LayoutAnimation } from "react-native"
 
 export enum ItemState {
   Unchecked = 0,
@@ -57,13 +57,24 @@ class ItemsStore {
   }
 
   addItem(name : string, notes : string) {
-    // let nameDoesNotExist = this.items.every((item) => {
-    //   item.name !== name
-    // })
+    let nameDoesNotExist = this.items.every((item) => {
+      item.name !== name
+    })
 
-    // if (!nameDoesNotExist) {
-    //   return false
-    // }
+    if (!nameDoesNotExist) {
+      Alert.alert(
+        "Invalid Name",
+        "Item this name already exists",
+        [
+          {
+            text: "Cancel",
+            style: "cancel"
+          }
+        ]
+      )
+      
+      return false
+    }
 
     if (name === "") {
       return false
