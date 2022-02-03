@@ -39,7 +39,6 @@ export default function AddItemScreen() {
       <View style={styles.searchContainer}>
         <TextInput
           placeholder="Item Name"
-          autoFocus={true}
           style={styles.input}
           returnKeyType="done"
           onChangeText={onChangeText}

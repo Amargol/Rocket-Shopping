@@ -40,7 +40,7 @@ export default function ItemsScreen() {
       let success = itemsStore.addItem(searchQuery, "")
   
       if (success) {
-        setSearchQuery("")
+        // setSearchQuery("")
       }
     }
   }

@@ -57,9 +57,7 @@ class ItemsStore {
   }
 
   addItem(name : string, notes : string) {
-    let nameDoesNotExist = this.items.every((item) => {
-      item.name !== name
-    })
+    let nameDoesNotExist = this.items.findIndex((item) => item.name == name) == -1
 
     if (!nameDoesNotExist) {
       Alert.alert(
