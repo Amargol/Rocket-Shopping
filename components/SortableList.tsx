@@ -11,7 +11,7 @@ import {
 import { Item, itemsStore, ItemState } from '../store/itemsStore';
 import Checkbox from 'expo-checkbox';
 import ItemCheckbox from './ItemCheckbox';
-import { AntDesign } from '@expo/vector-icons'; 
+import { AntDesign, Entypo } from '@expo/vector-icons'; 
 import * as Haptics from 'expo-haptics';
 
 interface SortableListProps {
@@ -52,14 +52,19 @@ export default class SortableList extends Component<SortableListProps> {
           itemsStore.items.map((item) => {
             return (
               <View style={styles.boxContainer} key={item.id}>
-                <Pressable onPress={() => this.moveItem(item, 1)} onLongPress={() => this.moveItem(item, 10)}>
-                  <View style={styles.ends}>
-                    <AntDesign name="arrowdown" size={24} color="white" />
+                <Pressable onPress={() => itemsStore.removeItem(item.id)}>
+                  <View style={[styles.ends, {marginRight: 10}]}>
+                    <Entypo name="cross" size={24} color="red" />
                   </View>
                 </Pressable>
                 <View style={styles.spacer}></View>
                 <Text style={styles.txt}>{item.name}</Text>
                 <View style={styles.spacer}></View>
+                <Pressable onPress={() => this.moveItem(item, 1)} onLongPress={() => this.moveItem(item, 10)}>
+                  <View style={[styles.ends, {marginRight: 10}]}>
+                    <AntDesign name="arrowdown" size={24} color="white" />
+                  </View>
+                </Pressable>
                 <Pressable onPress={() => this.moveItem(item, -1)} onLongPress={() => this.moveItem(item, -10)}>
                   <View style={styles.ends}>
                     <AntDesign name="arrowup" size={24} color="white" />

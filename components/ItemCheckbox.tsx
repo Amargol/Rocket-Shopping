@@ -94,7 +94,8 @@ class ItemCheckboxInner extends Component<ItemCheckboxProps, ItemCheckboxState> 
       >
         <Pressable onPress={this.onPress} style={{width: this.width - 40}}>
           <View style={styles.container}>
-            <Checkbox style={styles.checkbox} value={item.isChecked} onValueChange={this.onPress}/>
+            {/* <Checkbox style={styles.checkbox} value={item.isChecked} onValueChange={this.onPress}/> */}
+            <BouncyCheckbox isChecked={item.isChecked} onPress={this.onPress} />
             <Text style={styles.txt}>{this.props.item.name}</Text>
           </View>
         </Pressable>
@@ -113,7 +114,7 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
     alignItems: "center",
-    marginHorizontal: 10,
+    marginHorizontal: 15,
     paddingVertical: 5,
   },
   txt: {
