@@ -2,8 +2,8 @@ import { FontAwesome } from '@expo/vector-icons';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { Alert, Button, KeyboardAvoidingView, Platform, Pressable, SafeAreaView, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
+import React, { useEffect } from 'react';
+import { Alert, Button, KeyboardAvoidingView, Platform, Pressable, SafeAreaView, StyleSheet, TouchableOpacity, TextInput, Keyboard } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 import EditScreenInfo from '../components/EditScreenInfo';
@@ -17,12 +17,6 @@ export default function EditItemScreen(props : any) {
   const [text, onChangeText] = React.useState(item.name);
   const [notes, onChangeNotes] = React.useState(item.notes);
   const [editing, onChangeEditing] = React.useState(false);
-
-  // navigation.addListener('blur', () => {
-  //   if (text !== "") {
-  //     saveNotes()
-  //   }
-  // })
 
   const onPressSave = () => {
     if (text === "") {
