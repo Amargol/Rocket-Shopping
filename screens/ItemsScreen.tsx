@@ -9,6 +9,7 @@ import { itemsStore } from "../store/itemsStore";
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { observer } from "mobx-react";
+import * as Haptics from 'expo-haptics';
 
 interface ItemsScreenProps {
   navigation : NativeStackNavigationProp<any, string>
@@ -24,7 +25,9 @@ class ItemsScreenInner extends Component<ItemsScreenProps> {
 
   checkFirstItem = () => {
     if (itemsStore.searchQuery !== "" && itemsStore.sortedItems.length > 0) {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
       itemsStore.toggleItemCheck(itemsStore.sortedItems[0].id)
+      itemsStore.setSearchQuery("")
     }
   }
 
@@ -35,6 +38,7 @@ class ItemsScreenInner extends Component<ItemsScreenProps> {
       let success = itemsStore.addItem(itemsStore.searchQuery, "")
   
       if (success) {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
         itemsStore.setSearchQuery("")
       } else {
         Keyboard.dismiss()
