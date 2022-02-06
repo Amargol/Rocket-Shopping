@@ -35,7 +35,7 @@ class ItemsScreenInner extends Component<ItemsScreenProps> {
       let success = itemsStore.addItem(itemsStore.searchQuery, "")
   
       if (success) {
-        // setSearchQuery("")
+        itemsStore.setSearchQuery("")
       } else {
         Keyboard.dismiss()
       }
