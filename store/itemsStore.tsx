@@ -159,13 +159,17 @@ class ItemsStore {
   }
 
   get sortedItems() {
-    return this.items.concat().sort((a, b) => {
+    let res = this.items.filter((item) => {
+      return item.name.toLowerCase().indexOf(this.searchQuery.toLowerCase()) >= 0
+    }).sort((a, b) => {
       if (a.isChecked == b.isChecked) {
         return 0
       } else {
         return a.isChecked ? 1 : -1
       }
     })
+
+    return res
   }
 
   saveToStore() {

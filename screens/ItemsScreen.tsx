@@ -22,6 +22,12 @@ class ItemsScreenInner extends Component<ItemsScreenProps> {
     super(props);
   }
 
+  checkFirstItem = () => {
+    if (itemsStore.searchQuery !== "" && itemsStore.sortedItems.length > 0) {
+      itemsStore.toggleItemCheck(itemsStore.sortedItems[0].id)
+    }
+  }
+
   addItem = () => {
     if (itemsStore.searchQuery == "") {
       this.props.navigation.push('Add Item')
@@ -74,7 +80,7 @@ class ItemsScreenInner extends Component<ItemsScreenProps> {
             onChangeText={(value) => {this.onChangeText(value)}}
             clearButtonMode="always"
           />
-          <TouchableOpacity onPress={this.addItem} activeOpacity={.5}>
+          <TouchableOpacity onPress={this.checkFirstItem} activeOpacity={.5}>
             <View style={styles.addButton}>
               <FontAwesome5 name="check" size={28} color="#23A9DD" />
             </View>

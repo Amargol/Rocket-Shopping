@@ -76,6 +76,7 @@ class ItemCheckboxInner extends Component<ItemCheckboxProps, ItemCheckboxState> 
 
     return (
       <ScrollView
+        keyboardShouldPersistTaps="always"
         horizontal={true}
         onScroll={(e) => {
           const xOffset = e.nativeEvent.contentOffset.x;
