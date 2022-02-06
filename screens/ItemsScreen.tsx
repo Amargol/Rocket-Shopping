@@ -79,6 +79,7 @@ class ItemsScreenInner extends Component<ItemsScreenProps> {
             value={itemsStore.searchQuery}
             onChangeText={(value) => {this.onChangeText(value)}}
             clearButtonMode="always"
+            autoCapitalize="words"
           />
           <TouchableOpacity onPress={this.checkFirstItem} activeOpacity={.5}>
             <View style={styles.addButton}>
