@@ -45,7 +45,8 @@ export default function AddItemScreen() {
           value={text}
           clearButtonMode="always"
           onSubmitEditing={onSubmit}
-        />
+          autoCapitalize="words"
+          />
       </View>
       <View style={styles.notesSearchContainer}>
         <TextInput
