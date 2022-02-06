@@ -6,7 +6,8 @@ import {
   View,
   ScrollView,
   LayoutAnimation,
-  Pressable
+  Pressable,
+  Dimensions
 } from 'react-native';
 import { Item, itemsStore, ItemState } from '../store/itemsStore';
 import Checkbox from 'expo-checkbox';
@@ -44,8 +45,15 @@ export default class SortableList extends Component<SortableListProps> {
 
     itemsStore.moveItem(item.id, distance)
   }
+  width: any;
+
+  constructor(props: SortableListProps | Readonly<SortableListProps>) {
+    super(props)
+    this.width = Dimensions.get('window').width
+  }
 
   render() {
+
     return (
       <View style={styles.container}>
         {
@@ -53,12 +61,12 @@ export default class SortableList extends Component<SortableListProps> {
             return (
               <View style={styles.boxContainer} key={item.id}>
                 <Pressable onPress={() => itemsStore.removeItem(item.id)}>
-                  <View style={[styles.ends, {marginRight: 10}]}>
+                  <View style={[styles.ends]}>
                     <Entypo name="cross" size={24} color="red" />
                   </View>
                 </Pressable>
                 <View style={styles.spacer}></View>
-                <Text style={styles.txt}>{item.name}</Text>
+                <Text style={[styles.txt, {maxWidth: this.width - 24 * 3 - 100}]}>{item.name}</Text>
                 <View style={styles.spacer}></View>
                 <Pressable onPress={() => this.moveItem(item, 1)} onLongPress={() => this.moveItem(item, 10)}>
                   <View style={[styles.ends, {marginRight: 10}]}>
