@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Component } from "react";
 import { Alert, Button, Keyboard, KeyboardAvoidingView, LayoutAnimation, Pressable, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { FontAwesome5 } from '@expo/vector-icons'; 
 
@@ -8,36 +8,25 @@ import CheckList from "../components/CheckList";
 import { itemsStore } from "../store/itemsStore";
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { observer } from "mobx-react";
 
+interface ItemsScreenProps {
+  navigation : NativeStackNavigationProp<any, string>
+}
 
 // lightColor="#eee" darkColor="rgba(255,255,255,0.1)" 
+@observer
+class ItemsScreenInner extends Component<ItemsScreenProps> {
 
-export default function ItemsScreen() {
-  const navigation = useNavigation<NativeStackNavigationProp<any>>();
+  constructor(props : any) {
+    super(props);
+  }
 
-  const [searchQuery, setSearchQuery] = React.useState("")
-  let isKeyboardOpen = false
-
-
-  const keyboardDidShowListener = Keyboard.addListener(
-    'keyboardDidShow',
-    () => {
-      isKeyboardOpen = true
-    }
-  );
-  const keyboardDidHideListener = Keyboard.addListener(
-    'keyboardDidHide',
-    () => {
-      isKeyboardOpen = false
-    }
-  );
-
-
-  const addItem = () => {
-    if (searchQuery == "" && !isKeyboardOpen) {
-      navigation.push('Add Item')
+  addItem = () => {
+    if (itemsStore.searchQuery == "") {
+      this.props.navigation.push('Add Item')
     } else {
-      let success = itemsStore.addItem(searchQuery, "")
+      let success = itemsStore.addItem(itemsStore.searchQuery, "")
   
       if (success) {
         // setSearchQuery("")
@@ -47,7 +36,7 @@ export default function ItemsScreen() {
     }
   }
 
-  const onChangeText = (value: string) => {
+  onChangeText = (value: string) => {
     LayoutAnimation.configureNext({
       duration: 100,
       create: {
@@ -63,36 +52,45 @@ export default function ItemsScreen() {
       }
     })
 
-    setSearchQuery(value)
+    itemsStore.setSearchQuery(value)
   }
 
-  return (
-    <KeyboardAvoidingView style={styles.container} behavior="padding" keyboardVerticalOffset={90}>
-      <View style={[styles.container, {marginTop: 10}]}>
-        <CheckList query={searchQuery} />
-      </View>
-      <View style={styles.searchContainer}>
-        <TouchableOpacity onPress={addItem} activeOpacity={.5}>
-          <View style={styles.addButton}>
-            <FontAwesome5 name="plus" size={28} color="#23A9DD" />
-          </View>
-        </TouchableOpacity>
-        <TextInput
-          placeholder="Search or Add Item"
-          style={styles.input}
-          value={searchQuery}
-          onChangeText={(value) => {onChangeText(value)}}
-          clearButtonMode="always"
-        />
-        <TouchableOpacity onPress={addItem} activeOpacity={.5}>
-          <View style={styles.addButton}>
-            <FontAwesome5 name="check" size={28} color="#23A9DD" />
-          </View>
-        </TouchableOpacity>
-      </View>
-    </KeyboardAvoidingView>
-  );
+  render () {
+    return (
+      <KeyboardAvoidingView style={styles.container} behavior="padding" keyboardVerticalOffset={90}>
+        <View style={[styles.container, {marginTop: 10}]}>
+          <CheckList query={itemsStore.searchQuery} />
+        </View>
+        <View style={styles.searchContainer}>
+          <TouchableOpacity onPress={this.addItem} activeOpacity={.5}>
+            <View style={styles.addButton}>
+              <FontAwesome5 name="plus" size={28} color="#23A9DD" />
+            </View>
+          </TouchableOpacity>
+          <TextInput
+            placeholder="Search or Add Item"
+            style={styles.input}
+            value={itemsStore.searchQuery}
+            onChangeText={(value) => {this.onChangeText(value)}}
+            clearButtonMode="always"
+          />
+          <TouchableOpacity onPress={this.addItem} activeOpacity={.5}>
+            <View style={styles.addButton}>
+              <FontAwesome5 name="check" size={28} color="#23A9DD" />
+            </View>
+          </TouchableOpacity>
+        </View>
+      </KeyboardAvoidingView>
+    );
+  }
 }
+
+export default function ItemsScreen(props : any) {
+  const navigation = useNavigation<NativeStackNavigationProp<any>>();
+
+  return <ItemsScreenInner {...props} navigation={navigation} />
+}
+
 
 const styles = StyleSheet.create({
   container: {

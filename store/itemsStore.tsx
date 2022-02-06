@@ -34,6 +34,7 @@ export class Item {
 
 class ItemsStore {
   items : Item[] = []
+  searchQuery : string = ""
 
   constructor () {
     AsyncStorage.getItem("items").then(items => {
@@ -45,7 +46,9 @@ class ItemsStore {
     });
 
     makeObservable(this, {
+      searchQuery: observable,
       items: observable,
+      setSearchQuery: action,
       addItem: action,
       removeItem: action,
       toggleItemCheck: action,
@@ -54,6 +57,10 @@ class ItemsStore {
       count: computed,
       sortedItems: computed
     })
+  }
+
+  setSearchQuery(newQuery : string) {
+    this.searchQuery = newQuery
   }
 
   addItem(name : string, notes : string) {
