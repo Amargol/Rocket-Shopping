@@ -10,6 +10,7 @@ import SortableList from '../components/SortableList';
 import { Text, View } from '../components/Themed';
 import { itemsStore } from '../store/itemsStore';
 import * as Haptics from 'expo-haptics';
+import DeletableList from '../components/DeletableList';
 
 export default function AddRecipeScreen() {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
@@ -51,7 +52,7 @@ export default function AddRecipeScreen() {
           <Text style={styles.submitButtonText}>Submit</Text>
         </View>
       </TouchableOpacity>
-      {/* <SortableList /> */}
+      <DeletableList />
       <View style={styles.separator}></View>
     </KeyboardAwareScrollView>
   );

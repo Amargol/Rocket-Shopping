@@ -84,7 +84,8 @@ class ItemsStore {
       updateItem: action,
       count: computed,
       sortedItems: computed,
-      addRecipe: action
+      addRecipe: action,
+      removeRecipe: action,
     })
   }
 
@@ -238,6 +239,12 @@ class ItemsStore {
     this.recipes = [recipe, ...this.recipes]
     this.saveToStore()
     return recipe
+  }
+
+  removeRecipe(id : string) {
+    this.recipes = this.recipes.filter(item => item.id != id)
+
+    this.saveToStore()
   }
 
   saveToStore() {

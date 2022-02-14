@@ -114,7 +114,7 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
     alignItems: "center",
-    marginHorizontal: 13,
+    marginHorizontal: 11,
     paddingVertical: 5,
   },
   txt: {
