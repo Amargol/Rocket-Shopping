@@ -18,9 +18,11 @@ import ItemsScreen from '../screens/ItemsScreen';
 import ModalScreen from '../screens/ModalScreen';
 import NotFoundScreen from '../screens/NotFoundScreen';
 import TabOneScreen from '../screens/TabOneScreen';
-import TabTwoScreen from '../screens/TabTwoScreen';
+import RecipesScreen from '../screens/RecipesScreen';
 import { RootStackParamList, RootTabParamList, RootTabScreenProps } from '../types';
 import LinkingConfiguration from './LinkingConfiguration';
+import AddRecipeScreen from '../screens/AddRecipeScreen';
+import EditRecipeScreen from '../screens/EditRecipeScreen';
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
@@ -43,11 +45,27 @@ function RootNavigator() {
     <Stack.Navigator>
       <Stack.Screen name="Root" component={BottomTabNavigator} options={{ headerShown: false }} />
       <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
+      <Stack.Screen name="Edit Recipe" component={EditRecipeScreen} options={{ title: 'Oops!' }} />
       <Stack.Group screenOptions={{ presentation: 'modal' }}>
         <Stack.Screen name="Modal" component={ModalScreen} />
         <Stack.Screen
           name="Add Item"
           component={AddItemScreen}
+          options={({ navigation }) => ({
+            headerLeft: () => (
+              <Pressable
+                onPress={() => navigation.pop()}
+                style={({ pressed }) => ({
+                  opacity: pressed ? 0.5 : 1,
+                })}>
+                <Text style={{color: "#007AFF"}}>Cancel</Text>
+              </Pressable>
+            )
+          })}  
+        />
+        <Stack.Screen
+          name="Add Recipe"
+          component={AddRecipeScreen}
           options={({ navigation }) => ({
             headerLeft: () => (
               <Pressable
@@ -107,10 +125,10 @@ function BottomTabNavigator() {
         })}
       />
       <BottomTab.Screen
-        name="TabTwo"
-        component={TabTwoScreen}
+        name="RecipesTab"
+        component={RecipesScreen}
         options={{
-          title: 'Tab Two',
+          title: 'Recipes',
           tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
         }}
       />

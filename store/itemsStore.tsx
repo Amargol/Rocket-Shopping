@@ -32,8 +32,27 @@ export class Item {
   }
 }
 
+export class Recipe {
+  name: string
+  requiredIngredients: Set<string>
+  optionalIngredients: Set<string>
+  isDisabled: boolean
+  notes: string
+  id: string
+
+  constructor (name : string) {
+    this.name = name
+    this.requiredIngredients = new Set<string>();
+    this.optionalIngredients = new Set<string>();
+    this.notes = ""
+    this.isDisabled = false
+    this.id = Date.now().toString() + "_" + ((Math.random() * 1000000) >> 0).toString()
+  }
+}
+
 class ItemsStore {
   items : Item[] = []
+  recipes : Recipe[] = []
   searchQuery : string = ""
 
   constructor () {
@@ -45,9 +64,18 @@ class ItemsStore {
       }
     });
 
+    AsyncStorage.getItem("recipes").then(recipes => {
+      if (recipes !== null) {
+        this.recipes = JSON.parse(recipes)
+      } else {
+        this.items = []
+      }
+    });
+
     makeObservable(this, {
       searchQuery: observable,
       items: observable,
+      recipes: observable,
       setSearchQuery: action,
       addItem: action,
       removeItem: action,
@@ -55,7 +83,8 @@ class ItemsStore {
       moveItem: action,
       updateItem: action,
       count: computed,
-      sortedItems: computed
+      sortedItems: computed,
+      addRecipe: action
     })
   }
 
@@ -63,13 +92,13 @@ class ItemsStore {
     this.searchQuery = newQuery
   }
 
-  addItem(name : string, notes : string) {
+  addItem(name : string, notes : string) : boolean {
     let nameDoesNotExist = this.items.findIndex((item) => item.name == name) == -1
 
     if (!nameDoesNotExist) {
       Alert.alert(
         "Invalid Name",
-        "Item this name already exists",
+        "Item with this name already exists",
         [
           {
             text: "Cancel",
@@ -172,8 +201,48 @@ class ItemsStore {
     return res
   }
 
+  addRecipe(name : string) : Recipe | undefined {
+    let nameDoesNotExist = this.recipes.findIndex((item) => item.name == name) == -1
+
+    if (name === "") {
+      Alert.alert(
+        "Invalid Item",
+        "Item must have a name",
+        [
+          {
+            text: "Cancel",
+            style: "cancel"
+          }
+        ]
+      )
+
+      return undefined
+    }
+
+    if (!nameDoesNotExist) {
+      Alert.alert(
+        "Invalid Name",
+        "Recipe with this name already exists",
+        [
+          {
+            text: "Cancel",
+            style: "cancel"
+          }
+        ]
+      )
+      
+      return undefined
+    }
+
+    let recipe = new Recipe(name)
+    this.recipes = [recipe, ...this.recipes]
+    this.saveToStore()
+    return recipe
+  }
+
   saveToStore() {
     AsyncStorage.setItem("items", JSON.stringify(this.items));
+    AsyncStorage.setItem("recipes", JSON.stringify(this.recipes));
   }
 }
 
