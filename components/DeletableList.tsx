@@ -24,7 +24,7 @@ interface SortableListProps {
 @observer
 export default class DeletableList extends Component<SortableListProps> {
   moveItem = (item : Item, distance : number) => {
-    let duration = distance > 1 ? 200 : 50
+    let duration = Math.abs(distance) > 1 ? 200 : 50
 
     LayoutAnimation.configureNext({
       duration: duration,

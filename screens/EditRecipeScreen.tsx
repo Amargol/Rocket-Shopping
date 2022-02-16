@@ -8,6 +8,7 @@ import { Recipe, itemsStore } from '../store/itemsStore';
 import React from 'react';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import ItemCheckbox from '../components/ItemCheckbox';
+import { FontAwesome5 } from '@expo/vector-icons';
 
 export default function EditRecipeScreen(props : any) {
 
@@ -67,18 +68,6 @@ export default function EditRecipeScreen(props : any) {
           editable={editing}
         />
       </View>
-      <View style={styles.middleContainer}>
-        <Text style={styles.headText}>Required Items</Text>
-        <ItemCheckbox item={itemsStore.items[0]} navigation={navigation} />
-        <ItemCheckbox item={itemsStore.items[0]} navigation={navigation} />
-        <ItemCheckbox item={itemsStore.items[0]} navigation={navigation} />
-      </View>
-      <View style={styles.middleContainer}>
-        <Text style={styles.headText}>Optional Items</Text>
-        <ItemCheckbox item={itemsStore.items[0]} navigation={navigation} />
-        <ItemCheckbox item={itemsStore.items[0]} navigation={navigation} />
-        <ItemCheckbox item={itemsStore.items[0]} navigation={navigation} />
-      </View>
       <View style={styles.notesSearchContainer}>
         <View style={{display: 'flex', flexDirection: "row"}}>
           <Text style={styles.headText}>Notes</Text>
@@ -96,11 +85,35 @@ export default function EditRecipeScreen(props : any) {
           onChangeText={onChangeNotes}
         />
       </View>
-      {/* <TouchableOpacity activeOpacity={.8} onPress={onSubmit}>
-        <View style={styles.submitButtonContainer}>
-          <Text style={styles.submitButtonText}>Save</Text>
-        </View>
-      </TouchableOpacity> */}
+      <View style={styles.middleContainer}>
+        <Text style={styles.headText}>Required Items</Text>
+        <ItemCheckbox item={itemsStore.items[0]} navigation={navigation} />
+        <ItemCheckbox item={itemsStore.items[0]} navigation={navigation} />
+        <ItemCheckbox item={itemsStore.items[0]} navigation={navigation} />
+        {
+          editing && 
+          <TouchableOpacity activeOpacity={.8}>
+            <View style={[styles.button, {backgroundColor: inputBackground}]}>
+              <FontAwesome5 name="plus" size={23} color="#007AFF" />
+            </View>
+          </TouchableOpacity>
+        }
+      </View>
+      <View style={styles.middleContainer}>
+        <Text style={styles.headText}>Optional Items</Text>
+        <ItemCheckbox item={itemsStore.items[0]} navigation={navigation} />
+        <ItemCheckbox item={itemsStore.items[0]} navigation={navigation} />
+        <ItemCheckbox item={itemsStore.items[0]} navigation={navigation} />
+        {
+          editing && 
+          <TouchableOpacity activeOpacity={.8}>
+            <View style={[styles.button, {backgroundColor: inputBackground}]}>
+              <FontAwesome5 name="plus" size={23} color="#007AFF" />
+            </View>
+          </TouchableOpacity>
+        }
+      </View>
+
     </KeyboardAwareScrollView>
   );
 }
@@ -143,7 +156,7 @@ const styles = StyleSheet.create({
   notesSearchContainer: {
     margin: 10,
     marginTop: 10,
-    marginBottom: 30,
+    marginBottom: 10,
     overflow: "hidden",
   },
   notesInput: {
@@ -184,4 +197,12 @@ const styles = StyleSheet.create({
     // flexDirection: "row",
     // alignItems: "center"
   },
+  button: {
+    backgroundColor: "green",
+    alignItems: 'center',
+    padding: 10,
+    marginHorizontal: 0,
+    marginVertical: 5,
+    borderRadius: 4
+  }
 });
