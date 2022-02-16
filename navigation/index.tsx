@@ -23,6 +23,7 @@ import { RootStackParamList, RootTabParamList, RootTabScreenProps } from '../typ
 import LinkingConfiguration from './LinkingConfiguration';
 import AddRecipeScreen from '../screens/AddRecipeScreen';
 import EditRecipeScreen from '../screens/EditRecipeScreen';
+import SelectItemScreen from '../screens/SelectItemScreen';
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
@@ -66,6 +67,21 @@ function RootNavigator() {
         <Stack.Screen
           name="Add Recipe"
           component={AddRecipeScreen}
+          options={({ navigation }) => ({
+            headerLeft: () => (
+              <Pressable
+                onPress={() => navigation.pop()}
+                style={({ pressed }) => ({
+                  opacity: pressed ? 0.5 : 1,
+                })}>
+                <Text style={{color: "#007AFF"}}>Cancel</Text>
+              </Pressable>
+            )
+          })}  
+        />
+        <Stack.Screen
+          name="Select Item"
+          component={SelectItemScreen}
           options={({ navigation }) => ({
             headerLeft: () => (
               <Pressable

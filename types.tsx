@@ -19,6 +19,7 @@ export type RootStackParamList = {
   NotFound: undefined;
   "Add Item": undefined;
   "Add Recipe": undefined;
+  "Select Item": undefined;
   "Edit Item": undefined;
   "Edit Recipe": undefined;
 };

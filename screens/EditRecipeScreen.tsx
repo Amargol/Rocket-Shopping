@@ -39,6 +39,13 @@ export default function EditRecipeScreen(props : any) {
     }
   }
 
+  const onPressPlus = (isRequired: boolean) => {
+    navigation.push("Select Item", {
+      isRequired: isRequired,
+      recipe: recipe
+    })
+  }
+
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
@@ -92,7 +99,7 @@ export default function EditRecipeScreen(props : any) {
         <ItemCheckbox item={itemsStore.items[0]} navigation={navigation} />
         {
           editing && 
-          <TouchableOpacity activeOpacity={.8}>
+          <TouchableOpacity activeOpacity={.8} onPress={() => onPressPlus(true)}>
             <View style={[styles.button, {backgroundColor: inputBackground}]}>
               <FontAwesome5 name="plus" size={23} color="#007AFF" />
             </View>
@@ -106,7 +113,7 @@ export default function EditRecipeScreen(props : any) {
         <ItemCheckbox item={itemsStore.items[0]} navigation={navigation} />
         {
           editing && 
-          <TouchableOpacity activeOpacity={.8}>
+          <TouchableOpacity activeOpacity={.8} onPress={() => onPressPlus(false)}>
             <View style={[styles.button, {backgroundColor: inputBackground}]}>
               <FontAwesome5 name="plus" size={23} color="#007AFF" />
             </View>
