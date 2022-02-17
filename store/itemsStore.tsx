@@ -247,6 +247,22 @@ class ItemsStore {
     this.saveToStore()
   }
 
+  addItemToRecipe(item : Item, recipe : Recipe, isRequired : boolean) {
+    let i = this.recipes.findIndex((r) => r.id === recipe.id)
+
+    if (i == -1) {
+      return false
+    }
+
+    if (isRequired) {
+      this.recipes[i].requiredIngredients.add(item.id)
+    } else {
+      this.recipes[i].optionalIngredients.add(item.id)
+    }
+
+    return true
+  }
+
   saveToStore() {
     AsyncStorage.setItem("items", JSON.stringify(this.items));
     AsyncStorage.setItem("recipes", JSON.stringify(this.recipes));

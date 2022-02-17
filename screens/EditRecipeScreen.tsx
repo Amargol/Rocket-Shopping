@@ -19,6 +19,9 @@ export default function EditRecipeScreen(props : any) {
   const [text, onChangeText] = React.useState(recipe.name);
   const [notes, onChangeNotes] = React.useState(recipe.notes);
 
+  const optionalItems = itemsStore.items.filter((item) => {recipe.optionalIngredients.has(item.id)})
+  const requiredItems = itemsStore.items.filter((item) => {recipe.requiredIngredients.has(item.id)})
+
   const onPressSave = () => {
     if (text === "") {
       Alert.alert(
@@ -94,9 +97,11 @@ export default function EditRecipeScreen(props : any) {
       </View>
       <View style={styles.middleContainer}>
         <Text style={styles.headText}>Required Items</Text>
-        <ItemCheckbox item={itemsStore.items[0]} navigation={navigation} />
-        <ItemCheckbox item={itemsStore.items[0]} navigation={navigation} />
-        <ItemCheckbox item={itemsStore.items[0]} navigation={navigation} />
+        {
+          requiredItems.map((item) => {
+            <ItemCheckbox item={item} key={item.id} navigation={navigation} />
+          })
+        }
         {
           editing && 
           <TouchableOpacity activeOpacity={.8} onPress={() => onPressPlus(true)}>
@@ -108,9 +113,11 @@ export default function EditRecipeScreen(props : any) {
       </View>
       <View style={styles.middleContainer}>
         <Text style={styles.headText}>Optional Items</Text>
-        <ItemCheckbox item={itemsStore.items[0]} navigation={navigation} />
-        <ItemCheckbox item={itemsStore.items[0]} navigation={navigation} />
-        <ItemCheckbox item={itemsStore.items[0]} navigation={navigation} />
+        {
+          optionalItems.map((item) => {
+            <ItemCheckbox item={item} key={item.id} navigation={navigation} />
+          })
+        }
         {
           editing && 
           <TouchableOpacity activeOpacity={.8} onPress={() => onPressPlus(false)}>

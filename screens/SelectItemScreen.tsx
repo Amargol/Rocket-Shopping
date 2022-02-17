@@ -8,7 +8,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import EditScreenInfo from '../components/EditScreenInfo';
 import SortableList from '../components/SortableList';
 import { Text, View } from '../components/Themed';
-import { itemsStore } from '../store/itemsStore';
+import { Item, itemsStore } from '../store/itemsStore';
 import * as Haptics from 'expo-haptics';
 import DeletableList from '../components/DeletableList';
 
@@ -21,8 +21,9 @@ export default function SelectItemScreen(props : any) {
 
   const [text, onChangeText] = React.useState("");
 
-  const onSubmit = () => {
-
+  const submit = (item : Item) => {
+    itemsStore.addItemToRecipe(item, recipe, isRequired)
+    navigation.pop()
   }
 
   return (
@@ -35,7 +36,6 @@ export default function SelectItemScreen(props : any) {
           onChangeText={onChangeText}
           value={text}
           clearButtonMode="always"
-          onSubmitEditing={onSubmit}
           autoCapitalize="words"
           autoFocus={true}
           />
@@ -47,8 +47,8 @@ export default function SelectItemScreen(props : any) {
             return item.name.toLowerCase().indexOf(text.toLowerCase()) != -1
           }).map((item) => {
             return (
-              <TouchableOpacity activeOpacity={.8}>
-                <View style={styles.boxContainer} key={item.id}>
+              <TouchableOpacity activeOpacity={.8} key={item.id} onPress={() => {submit(item)}}>
+                <View style={styles.boxContainer}>
                   <View style={styles.spacer}></View>
                   <Text style={[styles.txt, {maxWidth: width - 20}]}>{item.name}</Text>
                   <View style={styles.spacer}></View>
