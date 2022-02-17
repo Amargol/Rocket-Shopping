@@ -19,8 +19,10 @@ export default function EditRecipeScreen(props : any) {
   const [text, onChangeText] = React.useState(recipe.name);
   const [notes, onChangeNotes] = React.useState(recipe.notes);
 
-  const optionalItems = itemsStore.items.filter((item) => {recipe.optionalIngredients.has(item.id)})
-  const requiredItems = itemsStore.items.filter((item) => {recipe.requiredIngredients.has(item.id)})
+  const optionalItems = itemsStore.items.filter((item) => {return recipe.optionalIngredients.has(item.id)})
+  const requiredItems = itemsStore.items.filter((item) => {return recipe.requiredIngredients.has(item.id)})
+
+  console.log("Optionl\n", optionalItems, "Required\n", requiredItems, Math.random(), "\n")
 
   const onPressSave = () => {
     if (text === "") {
@@ -99,8 +101,14 @@ export default function EditRecipeScreen(props : any) {
         <Text style={styles.headText}>Required Items</Text>
         {
           requiredItems.map((item) => {
-            <ItemCheckbox item={item} key={item.id} navigation={navigation} />
+            return <ItemCheckbox item={item} key={item.id} navigation={navigation} />
           })
+        }
+        {
+          !editing && requiredItems.length == 0 &&
+          <View style={[styles.button, {backgroundColor: "#252526"}]}>
+            <Text style={{padding: 3}}>None</Text>
+          </View>
         }
         {
           editing && 
@@ -115,8 +123,14 @@ export default function EditRecipeScreen(props : any) {
         <Text style={styles.headText}>Optional Items</Text>
         {
           optionalItems.map((item) => {
-            <ItemCheckbox item={item} key={item.id} navigation={navigation} />
+            return <ItemCheckbox item={item} key={item.id} navigation={navigation} />
           })
+        }
+        {
+          !editing && optionalItems.length == 0 &&
+          <View style={[styles.button, {backgroundColor: "#252526"}]}>
+            <Text style={{padding: 3}}>None</Text>
+          </View>
         }
         {
           editing && 

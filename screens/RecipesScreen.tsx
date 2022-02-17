@@ -5,7 +5,7 @@ import { FontAwesome5 } from '@expo/vector-icons';
 
 import EditScreenInfo from '../components/EditScreenInfo';
 import CheckList from "../components/CheckList";
-import { itemsStore } from "../store/itemsStore";
+import { itemsStore, Recipe } from "../store/itemsStore";
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { observer } from "mobx-react";
@@ -50,6 +50,13 @@ class ItemsScreenInner extends Component<RecipesScreenProps> {
     }
   }
 
+  openRecipe = (recipe : Recipe) => {
+    this.props.navigation.push("Edit Recipe", {
+      recipe: recipe,
+      editing: false
+    })
+  }
+
   onChangeText = (value: string) => {
     LayoutAnimation.configureNext({
       duration: 100,
@@ -75,7 +82,13 @@ class ItemsScreenInner extends Component<RecipesScreenProps> {
         <View style={[styles.container, {marginTop: 10}]}>
           {/* <CheckList query={itemsStore.searchQuery} /> */}
           {
-            itemsStore.recipes.map((item) => <Text style={{color: "white"}} key={item.id}>{item.name}</Text>)
+            itemsStore.recipes.map((recipe) => (
+              <TouchableOpacity key={recipe.id} onPress={() => {this.openRecipe(recipe)}}>
+                <View style={styles.recipeCard}>
+                  <Text style={{color: "white"}} >{recipe.name}</Text>
+                </View>
+              </TouchableOpacity>
+            ))
           }
         </View>
         <View style={styles.searchContainer}>
@@ -151,4 +164,7 @@ const styles = StyleSheet.create({
     height: 1,
     width: '80%',
   },
+  recipeCard: {
+    padding: 10
+  }
 });
