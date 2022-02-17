@@ -19,8 +19,8 @@ export default function EditRecipeScreen(props : any) {
   const [text, onChangeText] = React.useState(recipe.name);
   const [notes, onChangeNotes] = React.useState(recipe.notes);
 
-  const optionalItems = itemsStore.items.filter((item) => {return recipe.optionalIngredients.has(item.id)})
-  const requiredItems = itemsStore.items.filter((item) => {return recipe.requiredIngredients.has(item.id)})
+  const optionalItems = itemsStore.items.filter((item) => {return recipe.optionalIngredients.indexOf(item.id) !== -1})
+  const requiredItems = itemsStore.items.filter((item) => {return recipe.requiredIngredients.indexOf(item.id) !== -1})
 
   console.log("Optionl\n", optionalItems, "Required\n", requiredItems, Math.random(), "\n")
 
@@ -65,7 +65,7 @@ export default function EditRecipeScreen(props : any) {
     })
   })
 
-  let inputBackground = editing ? "#252526" : "#0f0f0f"
+  let inputBackground = editing ? "#252526" : "#161616"
 
   return (
     <KeyboardAwareScrollView style={styles.container} keyboardShouldPersistTaps={'always'}>
@@ -106,12 +106,12 @@ export default function EditRecipeScreen(props : any) {
         }
         {
           !editing && requiredItems.length == 0 &&
-          <View style={[styles.button, {backgroundColor: "#252526"}]}>
+          <View style={[styles.button, {backgroundColor: inputBackground}]}>
             <Text style={{padding: 3}}>None</Text>
           </View>
         }
         {
-          editing && 
+          (editing) &&
           <TouchableOpacity activeOpacity={.8} onPress={() => onPressPlus(true)}>
             <View style={[styles.button, {backgroundColor: inputBackground}]}>
               <FontAwesome5 name="plus" size={23} color="#007AFF" />
@@ -128,12 +128,12 @@ export default function EditRecipeScreen(props : any) {
         }
         {
           !editing && optionalItems.length == 0 &&
-          <View style={[styles.button, {backgroundColor: "#252526"}]}>
+          <View style={[styles.button, {backgroundColor: inputBackground}]}>
             <Text style={{padding: 3}}>None</Text>
           </View>
         }
         {
-          editing && 
+          (editing) &&
           <TouchableOpacity activeOpacity={.8} onPress={() => onPressPlus(false)}>
             <View style={[styles.button, {backgroundColor: inputBackground}]}>
               <FontAwesome5 name="plus" size={23} color="#007AFF" />

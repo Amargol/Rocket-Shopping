@@ -34,16 +34,16 @@ export class Item {
 
 export class Recipe {
   name: string
-  requiredIngredients: Set<string>
-  optionalIngredients: Set<string>
+  requiredIngredients: string[]
+  optionalIngredients: string[]
   isDisabled: boolean
   notes: string
   id: string
 
   constructor (name : string) {
     this.name = name
-    this.requiredIngredients = new Set<string>();
-    this.optionalIngredients = new Set<string>();
+    this.requiredIngredients = [];
+    this.optionalIngredients = [];
     this.notes = ""
     this.isDisabled = false
     this.id = Date.now().toString() + "_" + ((Math.random() * 1000000) >> 0).toString()
@@ -255,12 +255,18 @@ class ItemsStore {
     }
 
     if (isRequired) {
-      this.recipes[i].requiredIngredients.add(item.id)
+      if (this.recipes[i].requiredIngredients.indexOf(item.id) === -1) {
+        this.recipes[i].requiredIngredients.push(item.id)
+        return true
+      }
     } else {
-      this.recipes[i].optionalIngredients.add(item.id)
+      if (this.recipes[i].optionalIngredients.indexOf(item.id) === -1) {
+        this.recipes[i].optionalIngredients.push(item.id)
+        return true
+      }
     }
 
-    return true
+    return false
   }
 
   saveToStore() {

@@ -66,7 +66,7 @@ export default function EditItemScreen(props : any) {
     })
   })
 
-  let inputBackground = editing ? "#252526" : "#0f0f0f"
+  let inputBackground = editing ? "#252526" : "#161616"
 
   return (
     <KeyboardAwareScrollView style={styles.container} bounces={editing} keyboardShouldPersistTaps={'always'}>
