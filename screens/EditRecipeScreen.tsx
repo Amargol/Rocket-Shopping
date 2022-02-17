@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { Alert, Pressable, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
+import { Alert, LayoutAnimation, Pressable, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
 
 import { Text, View } from '../components/Themed';
 import { RootStackScreenProps } from '../types';
@@ -40,6 +40,20 @@ export default function EditRecipeScreen(props : any) {
       if (editing) {
         // saveNotes()
       }
+      LayoutAnimation.configureNext({
+        duration: 50,
+        create: {
+          type: LayoutAnimation.Types.linear,
+          property: LayoutAnimation.Properties.opacity
+        },
+        update: {
+          type: LayoutAnimation.Types.linear,
+        },
+        delete: {
+          type: LayoutAnimation.Types.linear,
+          property: LayoutAnimation.Properties.opacity
+        }
+      })  
       onChangeEditing(!editing)
     }
   }
