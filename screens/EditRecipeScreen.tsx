@@ -5,12 +5,13 @@ import { Alert, LayoutAnimation, Pressable, StyleSheet, TextInput, TouchableOpac
 import { Text, View } from '../components/Themed';
 import { RootStackScreenProps } from '../types';
 import { Recipe, itemsStore } from '../store/itemsStore';
-import React from 'react';
+import React, { Component, useReducer } from 'react';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import ItemCheckbox from '../components/ItemCheckbox';
 import { FontAwesome5 } from '@expo/vector-icons';
+import { observer } from "mobx-react";
 
-export default function EditRecipeScreen(props : any) {
+function InnerEditRecipeScreen(props : any) {
 
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
   const recipe : Recipe = props.route.params.recipe
@@ -18,11 +19,10 @@ export default function EditRecipeScreen(props : any) {
   const [editing, onChangeEditing] = React.useState(props.route.params.editing);
   const [text, onChangeText] = React.useState(recipe.name);
   const [notes, onChangeNotes] = React.useState(recipe.notes);
+  const [, forceUpdate] = useReducer(x => x + 1, 0);
 
-  const optionalItems = itemsStore.items.filter((item) => {return recipe.optionalIngredients.indexOf(item.id) !== -1})
-  const requiredItems = itemsStore.items.filter((item) => {return recipe.requiredIngredients.indexOf(item.id) !== -1})
-
-  console.log("Optionl\n", optionalItems, "Required\n", requiredItems, Math.random(), "\n")
+  const optionalItems = itemsStore.sortedItems.filter((item) => {return recipe.optionalIngredients.indexOf(item.id) !== -1})
+  const requiredItems = itemsStore.sortedItems.filter((item) => {return recipe.requiredIngredients.indexOf(item.id) !== -1})
 
   const onPressSave = () => {
     if (text === "") {
@@ -61,7 +61,8 @@ export default function EditRecipeScreen(props : any) {
   const onPressPlus = (isRequired: boolean) => {
     navigation.push("Select Item", {
       isRequired: isRequired,
-      recipe: recipe
+      recipe: recipe,
+      callback: forceUpdate
     })
   }
 
@@ -115,7 +116,7 @@ export default function EditRecipeScreen(props : any) {
         <Text style={styles.headText}>Required Items</Text>
         {
           requiredItems.map((item) => {
-            return <ItemCheckbox item={item} key={item.id} navigation={navigation} />
+            return <ItemCheckbox item={item} key={item.id} navigation={navigation} callback={forceUpdate}/>
           })
         }
         {
@@ -137,7 +138,7 @@ export default function EditRecipeScreen(props : any) {
         <Text style={styles.headText}>Optional Items</Text>
         {
           optionalItems.map((item) => {
-            return <ItemCheckbox item={item} key={item.id} navigation={navigation} />
+            return <ItemCheckbox item={item} key={item.id} navigation={navigation} callback={forceUpdate} />
           })
         }
         {
@@ -158,6 +159,17 @@ export default function EditRecipeScreen(props : any) {
 
     </KeyboardAwareScrollView>
   );
+}
+
+@observer
+export default class EditRecipeScreen extends Component<any> {
+  constructor(props: any) {
+    super(props)
+  }
+
+  render() {
+    return <InnerEditRecipeScreen {...this.props}/>
+  }
 }
 
 const styles = StyleSheet.create({

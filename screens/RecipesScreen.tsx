@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Alert, Button, Keyboard, KeyboardAvoidingView, LayoutAnimation, Pressable, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import { FontAwesome5 } from '@expo/vector-icons'; 
+import { Entypo, FontAwesome5 } from '@expo/vector-icons'; 
 
 
 import EditScreenInfo from '../components/EditScreenInfo';
@@ -107,7 +107,7 @@ class ItemsScreenInner extends Component<RecipesScreenProps> {
           />
           <TouchableOpacity onPress={this.checkFirstItem} activeOpacity={.5}>
             <View style={styles.addButton}>
-              <FontAwesome5 name="check" size={28} color="#23A9DD" />
+              <Entypo name="shuffle" size={28} color="#23A9DD" />
             </View>
           </TouchableOpacity>
         </View>

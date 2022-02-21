@@ -276,3 +276,12 @@ class ItemsStore {
 }
 
 export const itemsStore = new ItemsStore()
+
+/*
+Fix rendering problem
+Made deletes safe
+Make functionality to delete items via swipe
+
+implement disable
+
+*/

@@ -16,6 +16,7 @@ export default function SelectItemScreen(props : any) {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
   const recipe = props.route.params.recipe
   const isRequired = props.route.params.isRequired
+  const callback = props.route.params.callback
   const width = Dimensions.get('window').width
 
 
@@ -24,6 +25,7 @@ export default function SelectItemScreen(props : any) {
   const submit = (item : Item) => {
     itemsStore.addItemToRecipe(item, recipe, isRequired)
     navigation.pop()
+    callback()
   }
 
   return (
