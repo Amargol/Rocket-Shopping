@@ -21,7 +21,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 interface ItemCheckboxProps {
   item : Item,
   navigation : NativeStackNavigationProp<any, string>
-  callback : () => void
+  callback? : () => void
 }
 
 interface ItemCheckboxState {
@@ -66,7 +66,9 @@ class ItemCheckboxInner extends Component<ItemCheckboxProps, ItemCheckboxState> 
     })
 
     itemsStore.toggleItemCheck(this.props.item.id)
-    this.props.callback()
+    if (this.props.callback) {
+      this.props.callback()
+    }
   }
 
   onRefresh = () => {
