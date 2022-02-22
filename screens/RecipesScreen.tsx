@@ -10,6 +10,7 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { observer } from "mobx-react";
 import * as Haptics from 'expo-haptics';
+import { ScrollView } from "react-native-gesture-handler";
 
 interface RecipesScreenProps {
   navigation : NativeStackNavigationProp<any, string>
@@ -46,7 +47,7 @@ class ItemsScreenInner extends Component<RecipesScreenProps> {
             editing: true
           })
         }, 0)
-      }  
+      }
     }
   }
 
@@ -79,18 +80,30 @@ class ItemsScreenInner extends Component<RecipesScreenProps> {
   render () {
     return (
       <KeyboardAvoidingView style={styles.container} behavior="padding" keyboardVerticalOffset={90}>
-        <View style={[styles.container, {marginTop: 10}]}>
+        <ScrollView style={[styles.container, {marginTop: 10}]}>
           {/* <CheckList query={itemsStore.searchQuery} /> */}
           {
             itemsStore.recipes.map((recipe) => (
-              <TouchableOpacity key={recipe.id} onPress={() => {this.openRecipe(recipe)}}>
+              <TouchableOpacity key={recipe.id} onPress={() => {this.openRecipe(recipe)}} activeOpacity={.8}>
                 <View style={styles.recipeCard}>
-                  <Text style={{color: "white"}} >{recipe.name}</Text>
+                  <View>
+                    <FontAwesome5 name="check" size={28} color="green" />
+                  </View>
+                  <View>
+                    <Text style={styles.recipeTitle}>{recipe.name}</Text>
+                    <View style={styles.recipeDetails}>
+                      {
+                        itemsStore.getPopulatedIngredients(recipe.optionalIngredients, itemsStore.items).map((item) => {
+                          return <Text style={styles.recipeDetailText}>{item.name}</Text>
+                        })
+                      }
+                    </View>
+                  </View>
                 </View>
               </TouchableOpacity>
             ))
           }
-        </View>
+        </ScrollView>
         <View style={styles.searchContainer}>
           <TouchableOpacity onPress={this.addItem} activeOpacity={.5}>
             <View style={styles.addButton}>
@@ -165,6 +178,28 @@ const styles = StyleSheet.create({
     width: '80%',
   },
   recipeCard: {
-    padding: 10
+    padding: 20,
+    paddingVertical: 10,
+    display: "flex",
+    flexDirection: "row",
+    backgroundColor: "#161616",
+    marginHorizontal: 10,
+    marginVertical: 5,
+    borderRadius: 10,
+  },
+  recipeDetails: {
+    // borderLeftWidth: 5,
+    borderLeftColor: "green",
+    paddingHorizontal: 10,
+  },
+  recipeTitle: {
+    color: "green",
+    fontSize: 25,
+    fontWeight: "bold",
+    paddingHorizontal: 10,
+  },
+  recipeDetailText: {
+    marginTop: 10,
+    color: "white",
   }
 });

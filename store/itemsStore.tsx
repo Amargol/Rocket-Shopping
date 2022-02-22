@@ -123,6 +123,12 @@ class ItemsStore {
   removeItem(id : string) {
     this.items = this.items.filter(item => item.id != id)
 
+    this.recipes = this.recipes.map((recipe) => {
+      recipe.optionalIngredients = recipe.optionalIngredients.filter(item => item != id)
+      recipe.requiredIngredients = recipe.requiredIngredients.filter(item => item != id)
+      return recipe
+    })
+
     this.saveToStore()
   }
 
@@ -257,16 +263,23 @@ class ItemsStore {
     if (isRequired) {
       if (this.recipes[i].requiredIngredients.indexOf(item.id) === -1) {
         this.recipes[i].requiredIngredients.push(item.id)
+        this.saveToStore()
         return true
       }
     } else {
       if (this.recipes[i].optionalIngredients.indexOf(item.id) === -1) {
         this.recipes[i].optionalIngredients.push(item.id)
+        this.saveToStore()
         return true
       }
     }
 
     return false
+  }
+
+  getPopulatedIngredients (ingredients : string[], items : Item[]) : Item[] {
+    let s = new Set(ingredients)
+    return items.filter((item) => s.has(item.id))
   }
 
   saveToStore() {
