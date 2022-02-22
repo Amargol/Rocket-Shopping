@@ -164,11 +164,40 @@ class ItemsStore {
     }
 
     let temp = this.items[i]
-    let res = this.items.filter((item, index) => index !== i)
+    let res = this.items.filter((_, index) => index !== i)
 
     res.splice(i + distance, 0, temp)
 
     this.items = res
+
+    this.saveToStore()
+
+    return true
+  }
+
+  moveRecipe (id : string, distance : number) {
+    let i = this.recipes.findIndex((item) => {
+      return item.id == id
+    })
+
+    if (i == -1) {
+      return false
+    }
+
+    if (i + distance < 0) {
+      distance = 0 - i
+    }
+
+    if (i + distance >= this.recipes.length) {
+      distance = this.recipes.length - i
+    }
+
+    let temp = this.recipes[i]
+    let res = this.recipes.filter((_, index) => index !== i)
+
+    res.splice(i + distance, 0, temp)
+
+    this.recipes = res
 
     this.saveToStore()
 
@@ -277,8 +306,8 @@ class ItemsStore {
     return false
   }
 
-  getPopulatedIngredients (ingredients : string[], items : Item[]) : Item[] {
-    let s = new Set(ingredients)
+  getPopulatedIngredients (requiredIngredients : string[], items : Item[]) : Item[] {
+    let s = new Set(requiredIngredients)
     return items.filter((item) => s.has(item.id))
   }
 
