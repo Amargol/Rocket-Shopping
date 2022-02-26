@@ -2,30 +2,41 @@ import { action, computed, makeObservable, observable } from "mobx"
 import { Alert, AsyncStorage, LayoutAnimation } from "react-native"
 
 export enum ItemState {
-  Unchecked = 0,
-  Checked = 1,
+  Pinned = 0,
+  Standard = 1,
   Disabled = 2
 }
 
 export class Item {
   name: string
   isChecked: boolean
-  isDisabled: boolean
+  state: ItemState
   notes: string
   id: string
+
+  get cpd () {
+    return this.isChecked ? "check" : "none"
+  }
 
   constructor (name : string, notes : string) {
     this.name = name
     this.isChecked = false
-    this.isDisabled = false
+    this.state = ItemState.Standard
     this.notes = notes
     this.id = Date.now().toString() + "_" + ((Math.random() * 1000000) >> 0).toString()
+
+    makeObservable(this, {
+      name: observable,
+      isChecked: observable,
+      state: observable,
+      notes: observable
+    })
   }
 
   static clone (item : Item) : Item {
     let res = new Item(item.name, item.notes)
     res.isChecked = item.isChecked
-    res.isDisabled = item.isDisabled
+    res.state = item.state
     res.id = item.id
 
     return res
@@ -134,15 +145,11 @@ class ItemsStore {
   }
 
   toggleItemCheck(id : string) {
-    this.items = this.items.map((item) => {
-      if (item.id == id) {
-        let newItem = Item.clone(item)
-        newItem.isChecked = !item.isChecked
-        return newItem
-      }
+    let item = this.items.find((item) => item.id == id)
 
-      return item
-    })
+    if (item) {
+      item.isChecked = !item.isChecked
+    }
 
     this.saveToStore()
   }
@@ -206,16 +213,12 @@ class ItemsStore {
   }
 
   updateItem(id : string, name : string, notes : string) {
-    this.items = this.items.map((item) => {
-      if (item.id == id) {
-        let newItem = Item.clone(item)
-        newItem.name = name
-        newItem.notes = notes
-        return newItem
-      }
+    let item = this.items.find((item) => item.id == id)
 
-      return item
-    })
+    if (item) {
+      item.name = name
+      item.notes = notes
+    }
 
     this.saveToStore()
   }
