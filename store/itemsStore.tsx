@@ -78,6 +78,7 @@ class ItemsStore {
       recipes: observable,
       setSearchQuery: action,
       addItem: action,
+      addItemToRecipe: action,
       removeItem: action,
       toggleItemCheck: action,
       moveItem: action,
@@ -302,6 +303,8 @@ class ItemsStore {
         return true
       }
     }
+
+    this.recipes = [...this.recipes]
 
     return false
   }

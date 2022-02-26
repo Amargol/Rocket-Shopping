@@ -65,7 +65,7 @@ export default function AddItemScreen() {
           <Text style={styles.submitButtonText}>Submit</Text>
         </View>
       </TouchableOpacity>
-      <SortableList />
+      <SortableList isItem={true} move={itemsStore.moveItem} remove={itemsStore.removeItem} />
       <View style={styles.separator}></View>
     </KeyboardAwareScrollView>
   );

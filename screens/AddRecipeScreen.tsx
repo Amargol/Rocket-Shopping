@@ -52,7 +52,7 @@ export default function AddRecipeScreen() {
           <Text style={styles.submitButtonText}>Submit</Text>
         </View>
       </TouchableOpacity>
-      <DeletableList />
+      <SortableList isItem={false} move={itemsStore.moveRecipe} remove={itemsStore.removeRecipe} />
       <View style={styles.separator}></View>
     </KeyboardAwareScrollView>
   );

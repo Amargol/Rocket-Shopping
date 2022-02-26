@@ -9,21 +9,23 @@ import {
   Pressable,
   Dimensions
 } from 'react-native';
-import { Item, itemsStore, ItemState } from '../store/itemsStore';
+import { Item, itemsStore, ItemState, Recipe } from '../store/itemsStore';
 import Checkbox from 'expo-checkbox';
 import ItemCheckbox from './ItemCheckbox';
 import { AntDesign, Entypo } from '@expo/vector-icons'; 
 import * as Haptics from 'expo-haptics';
 
 interface SortableListProps {
-  // query : string
+  isItem : boolean
+  move : (id : string, distance : number) => void
+  remove : (id : string) => void
 }
 
 
 
 @observer
 export default class SortableList extends Component<SortableListProps> {
-  moveItem = (item : Item, distance : number) => {
+  moveItem = (item : Item | Recipe, distance : number) => {
     let duration = Math.abs(distance) > 1 ? 200 : 50
 
     LayoutAnimation.configureNext({
@@ -43,7 +45,7 @@ export default class SortableList extends Component<SortableListProps> {
 
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
 
-    itemsStore.moveItem(item.id, distance)
+    this.props.isItem ? itemsStore.moveItem(item.id, distance) : itemsStore.moveRecipe(item.id, distance)
   }
   width: any;
 
@@ -54,13 +56,15 @@ export default class SortableList extends Component<SortableListProps> {
 
   render() {
 
+    let items = this.props.isItem ? itemsStore.items : itemsStore.recipes
+
     return (
       <View style={styles.container}>
         {
-          itemsStore.items.map((item) => {
+          items.map((item) => {
             return (
               <View style={styles.boxContainer} key={item.id}>
-                <Pressable onPress={() => itemsStore.removeItem(item.id)}>
+                <Pressable onPress={() => {this.props.isItem ? itemsStore.removeItem(item.id) : itemsStore.removeRecipe(item.id)}}>
                   <View style={[styles.ends]}>
                     <Entypo name="cross" size={24} color="red" />
                   </View>
