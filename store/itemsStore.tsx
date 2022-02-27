@@ -43,11 +43,17 @@ export class Item {
   }
 }
 
+export enum RecipeState {
+  Pinned = 0,
+  Standard = 1,
+  Disabled = 2
+}
+
 export class Recipe {
   name: string
-  requiredIngredients: string[]
-  optionalIngredients: string[]
-  isDisabled: boolean
+  requiredIngredients: Item[]
+  optionalIngredients: Item[]
+  state: RecipeState
   notes: string
   id: string
 
@@ -56,8 +62,16 @@ export class Recipe {
     this.requiredIngredients = [];
     this.optionalIngredients = [];
     this.notes = ""
-    this.isDisabled = false
+    this.state = RecipeState.Standard
     this.id = Date.now().toString() + "_" + ((Math.random() * 1000000) >> 0).toString()
+
+    makeObservable(this, {
+      name: observable,
+      requiredIngredients: observable,
+      optionalIngredients: observable,
+      state: observable,
+      notes: observable
+    })
   }
 }
 
@@ -136,8 +150,8 @@ class ItemsStore {
     this.items = this.items.filter(item => item.id != id)
 
     this.recipes = this.recipes.map((recipe) => {
-      recipe.optionalIngredients = recipe.optionalIngredients.filter(item => item != id)
-      recipe.requiredIngredients = recipe.requiredIngredients.filter(item => item != id)
+      recipe.optionalIngredients = recipe.optionalIngredients.filter(item => item.id != id)
+      recipe.requiredIngredients = recipe.requiredIngredients.filter(item => item.id != id)
       return recipe
     })
 
@@ -149,6 +163,21 @@ class ItemsStore {
 
     if (item) {
       item.isChecked = !item.isChecked
+
+      let isChecked = item.isChecked
+
+      this.recipes.forEach((recipe) => {
+        recipe.optionalIngredients.forEach((item) => {
+          if (item.id == id) {
+            item.isChecked = isChecked
+          }
+        })
+        recipe.requiredIngredients.forEach((item) => {
+          if (item.id == id) {
+            item.isChecked = isChecked
+          }
+        })
+      })
     }
 
     this.saveToStore()
@@ -287,34 +316,19 @@ class ItemsStore {
   }
 
   addItemToRecipe(item : Item, recipe : Recipe, isRequired : boolean) {
-    let i = this.recipes.findIndex((r) => r.id === recipe.id)
+    let canAdd = recipe.requiredIngredients.every((i) => i.id !== item.id) && recipe.optionalIngredients.every((i) => i.id !== item.id)
 
-    if (i == -1) {
+    if (!canAdd) {
       return false
     }
 
     if (isRequired) {
-      if (this.recipes[i].requiredIngredients.indexOf(item.id) === -1) {
-        this.recipes[i].requiredIngredients.push(item.id)
-        this.saveToStore()
-        return true
-      }
+      recipe.requiredIngredients.push(item)
     } else {
-      if (this.recipes[i].optionalIngredients.indexOf(item.id) === -1) {
-        this.recipes[i].optionalIngredients.push(item.id)
-        this.saveToStore()
-        return true
-      }
+      recipe.optionalIngredients.push(item)
     }
 
-    this.recipes = [...this.recipes]
-
-    return false
-  }
-
-  getPopulatedIngredients (requiredIngredients : string[], items : Item[]) : Item[] {
-    let s = new Set(requiredIngredients)
-    return items.filter((item) => s.has(item.id))
+    return true
   }
 
   saveToStore() {

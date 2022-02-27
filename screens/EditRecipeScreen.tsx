@@ -14,15 +14,30 @@ import { observer } from "mobx-react";
 function InnerEditRecipeScreen(props : any) {
 
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
-  const recipe : Recipe = props.route.params.recipe
+  var recipe : Recipe = props.route.params.recipe
+  // recipe = itemsStore.recipes.find((r) => r.id == recipe.id) as Recipe
 
   const [editing, onChangeEditing] = React.useState(props.route.params.editing);
   const [text, onChangeText] = React.useState(recipe.name);
   const [notes, onChangeNotes] = React.useState(recipe.notes);
   const [, forceUpdate] = useReducer(x => x + 1, 0);
 
-  const optionalItems = itemsStore.sortedItems.filter((item) => {return recipe.optionalIngredients.indexOf(item.id) !== -1})
-  const requiredItems = itemsStore.sortedItems.filter((item) => {return recipe.requiredIngredients.indexOf(item.id) !== -1})
+  const optionalItems = recipe.optionalIngredients.slice()
+  .sort((a, b) => {
+    if (a.isChecked == b.isChecked) {
+      return 0
+    } else {
+      return a.isChecked ? 1 : -1
+    }
+  })
+  const requiredItems = recipe.requiredIngredients.slice()
+  .sort((a, b) => {
+    if (a.isChecked == b.isChecked) {
+      return 0
+    } else {
+      return a.isChecked ? 1 : -1
+    }
+  })
 
   const onPressSave = () => {
     if (text === "") {
@@ -62,7 +77,6 @@ function InnerEditRecipeScreen(props : any) {
     navigation.push("Select Item", {
       isRequired: isRequired,
       recipe: recipe,
-      callback: forceUpdate
     })
   }
 
@@ -138,7 +152,7 @@ function InnerEditRecipeScreen(props : any) {
         <Text style={styles.headText}>Optional Items</Text>
         {
           optionalItems.map((item) => {
-            return <ItemCheckbox item={item} key={item.id} navigation={navigation} callback={forceUpdate} />
+            return <ItemCheckbox item={item} key={item.id} navigation={navigation} callback={forceUpdate}/>
           })
         }
         {

@@ -20,8 +20,8 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 interface ItemCheckboxProps {
   item : Item,
-  navigation : NativeStackNavigationProp<any, string>
-  callback? : () => void
+  navigation : NativeStackNavigationProp<any, string>,
+  callback : () => {} | undefined
 }
 
 interface ItemCheckboxState {
