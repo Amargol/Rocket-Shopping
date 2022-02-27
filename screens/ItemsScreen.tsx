@@ -99,7 +99,7 @@ class ItemsScreenInner extends Component<ItemsScreenProps> {
 export default function ItemsScreen(props : any) {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
 
-  return <ItemsScreenInner {...props} navigation={navigation} />
+  return (<ItemsScreenInner {...props} navigation={navigation} />)
 }
 
 

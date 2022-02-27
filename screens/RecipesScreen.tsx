@@ -94,7 +94,7 @@ class ItemsScreenInner extends Component<RecipesScreenProps> {
                     <View style={styles.recipeDetails}>
                       {
                         recipe.optionalIngredients.map((item) => {
-                          return <Text style={styles.recipeDetailText}>{item.name}</Text>
+                          return <Text style={styles.recipeDetailText} key={item.id}>{item.name}</Text>
                         })
                       }
                     </View>

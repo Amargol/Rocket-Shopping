@@ -1,11 +1,11 @@
-import { useNavigation } from '@react-navigation/native';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Alert, LayoutAnimation, Pressable, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
 
 import { Text, View } from '../components/Themed';
 import { RootStackScreenProps } from '../types';
 import { Recipe, itemsStore } from '../store/itemsStore';
-import React, { Component, useReducer } from 'react';
+import React, { Component, useEffect, useReducer } from 'react';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import ItemCheckbox from '../components/ItemCheckbox';
 import { FontAwesome5 } from '@expo/vector-icons';
@@ -21,6 +21,12 @@ function InnerEditRecipeScreen(props : any) {
   const [text, onChangeText] = React.useState(recipe.name);
   const [notes, onChangeNotes] = React.useState(recipe.notes);
   const [, forceUpdate] = useReducer(x => x + 1, 0);
+
+  const isFocused = useIsFocused()
+
+  useEffect(() => {
+    forceUpdate()
+  }, [isFocused])
 
   const optionalItems = recipe.optionalIngredients.slice()
   .sort((a, b) => {
