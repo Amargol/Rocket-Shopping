@@ -60,6 +60,7 @@ function InnerEditRecipeScreen(props : any) {
     } else {
       if (editing) {
         // saveNotes()
+        itemsStore.updateRecipe(recipe, text, notes)
       }
       LayoutAnimation.configureNext({
         duration: 50,

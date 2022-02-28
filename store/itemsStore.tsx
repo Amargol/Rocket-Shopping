@@ -103,15 +103,19 @@ class ItemsStore {
       recipes: observable,
       setSearchQuery: action,
       addItem: action,
-      addItemToRecipe: action,
       removeItem: action,
-      toggleItemCheck: action,
-      moveItem: action,
       updateItem: action,
-      count: computed,
-      sortedItems: computed,
+      setItemState: action,
+      moveItem: action,
+      toggleItemCheck: action,
       addRecipe: action,
       removeRecipe: action,
+      updateRecipe: action,
+      setRecipeState: action,
+      moveRecipe: action,
+      addItemToRecipe: action,
+      count: computed,
+      sortedItems: computed,
     })
   }
 
@@ -175,6 +179,29 @@ class ItemsStore {
         recipe.requiredIngredients.forEach((item) => {
           if (item.id == id) {
             item.isChecked = isChecked
+          }
+        })
+      })
+    }
+
+    this.saveToStore()
+  }
+
+  setItemState(id : string, itemState : ItemState) {
+    let item = this.items.find((item) => item.id == id)
+
+    if (item) {
+      item.state = itemState
+
+      this.recipes.forEach((recipe) => {
+        recipe.optionalIngredients.forEach((item) => {
+          if (item.id == id) {
+            item.state = itemState
+          }
+        })
+        recipe.requiredIngredients.forEach((item) => {
+          if (item.id == id) {
+            item.state = itemState
           }
         })
       })
@@ -328,7 +355,22 @@ class ItemsStore {
       recipe.optionalIngredients.push(item)
     }
 
+    this.saveToStore()
+
     return true
+  }
+
+  setRecipeState(recipe : Recipe, recipeState : RecipeState) {
+    recipe.state = recipeState
+
+    this.saveToStore()
+  }
+
+  updateRecipe(recipe : Recipe, name : string, notes : string) {
+    recipe.name = name
+    recipe.notes = notes
+
+    this.saveToStore()
   }
 
   saveToStore() {
