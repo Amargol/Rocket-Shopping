@@ -9,25 +9,21 @@ import {
   View,
   ScrollView
 } from 'react-native';
-import { Item, itemsStore, ItemState } from '../store/itemsStore';
+import { Item, itemsStore, ItemState, Recipe } from '../store/itemsStore';
 import Checkbox from 'expo-checkbox';
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
 import * as Haptics from 'expo-haptics';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { Entypo, FontAwesome5 } from '@expo/vector-icons';
 
 
-interface ItemCheckboxProps {
-  item : Item,
-  navigation : NativeStackNavigationProp<any, string>,
-  callback : () => {} | undefined
+interface RecipeCheckboxProps {
+  recipe : Recipe,
+  navigation : NativeStackNavigationProp<any, string>
 }
 
-interface ItemCheckboxState {
-  isChecked : boolean,
-}
-
-class ItemCheckboxInner extends Component<ItemCheckboxProps, ItemCheckboxState> {
+class RecipeCheckboxInner extends Component<RecipeCheckboxProps> {
   openingModal: boolean;
   width: number;
 
@@ -35,11 +31,9 @@ class ItemCheckboxInner extends Component<ItemCheckboxProps, ItemCheckboxState> 
   //   return this.props.item.state != nextProps.item.state
   // }
 
-  constructor(props : ItemCheckboxProps) {
+  constructor(props : RecipeCheckboxProps) {
     super(props);
-    this.state = {
-      isChecked: false,
-    }
+
     this.openingModal = false
     this.width = Dimensions.get('window').width
   }
@@ -62,14 +56,11 @@ class ItemCheckboxInner extends Component<ItemCheckboxProps, ItemCheckboxState> 
       }
     })
 
-    itemsStore.toggleItemCheck(this.props.item.id)
-    if (this.props.callback) {
-      this.props.callback()
-    }
+    // Navigate
   }
 
   render() {
-    let item = this.props.item
+    let recipe = this.props.recipe
 
     return (
       <ScrollView
@@ -80,9 +71,7 @@ class ItemCheckboxInner extends Component<ItemCheckboxProps, ItemCheckboxState> 
           if (xOffset < -30 && !this.openingModal) {
             Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
             this.openingModal = true
-            this.props.navigation.push("Edit Item", {
-              item: item
-            })
+            // Trigger event
           }
           if (xOffset == 0 && this.openingModal) {
             this.openingModal = false
@@ -92,8 +81,9 @@ class ItemCheckboxInner extends Component<ItemCheckboxProps, ItemCheckboxState> 
       >
         <Pressable onPress={this.onPress} style={{width: this.width - 40}}>
           <View style={styles.container}>
-            <Checkbox style={styles.checkbox} value={item.isChecked} onValueChange={this.onPress}/>
-            <Text style={styles.txt}>{this.props.item.name}</Text>
+            <FontAwesome5 name="chevron-down" size={25} color="#687784" />
+            <Checkbox style={styles.checkbox} value={recipe.requiredIngredients.every((item) => item.isChecked)} onValueChange={this.onPress}/>
+            <Text style={styles.txt}>{recipe.name}</Text>
           </View>
         </Pressable>
       </ScrollView>
@@ -101,10 +91,10 @@ class ItemCheckboxInner extends Component<ItemCheckboxProps, ItemCheckboxState> 
   }
 }
 
-export default function ItemCheckbox(props : any) {
+export default function RecipeCheckbox(props : any) {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
 
-  return <ItemCheckboxInner {...props} navigation={navigation} />
+  return <RecipeCheckboxInner {...props} navigation={navigation} />
 }
 
 const styles = StyleSheet.create({
@@ -120,6 +110,6 @@ const styles = StyleSheet.create({
   checkbox: {
     width: 30,
     height: 30,
-    marginRight: 10
+    marginHorizontal: 10
   }
 });

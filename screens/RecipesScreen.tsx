@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useEffect, useReducer } from "react";
 import { Alert, Button, Keyboard, KeyboardAvoidingView, LayoutAnimation, Pressable, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { Entypo, FontAwesome5 } from '@expo/vector-icons'; 
 
@@ -6,19 +6,22 @@ import { Entypo, FontAwesome5 } from '@expo/vector-icons';
 import EditScreenInfo from '../components/EditScreenInfo';
 import CheckList from "../components/CheckList";
 import { itemsStore, Recipe } from "../store/itemsStore";
-import { useNavigation } from '@react-navigation/native';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { observer } from "mobx-react";
 import * as Haptics from 'expo-haptics';
 import { ScrollView } from "react-native-gesture-handler";
+import RecipeCheckbox from "../components/RecipeCheckbox";
 
 interface RecipesScreenProps {
-  navigation : NativeStackNavigationProp<any, string>
+  navigation : NativeStackNavigationProp<any, string>,
+  refresher : number
 }
 
 // lightColor="#eee" darkColor="rgba(255,255,255,0.1)" 
 @observer
 class ItemsScreenInner extends Component<RecipesScreenProps> {
+  
 
   constructor(props : any) {
     super(props);
@@ -103,6 +106,12 @@ class ItemsScreenInner extends Component<RecipesScreenProps> {
               </TouchableOpacity>
             ))
           }
+          <View style={{height: 50}}></View>
+          {
+            itemsStore.recipes.map((recipe) => (
+              <RecipeCheckbox recipe={recipe} key={recipe.id}/>
+            ))
+          }
         </ScrollView>
         <View style={styles.searchContainer}>
           <TouchableOpacity onPress={this.addItem} activeOpacity={.5}>
@@ -131,8 +140,15 @@ class ItemsScreenInner extends Component<RecipesScreenProps> {
 
 export default function ItemsScreen(props : any) {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
+  const [update, forceUpdate] = useReducer(x => x + 1, 0);
 
-  return <ItemsScreenInner {...props} navigation={navigation} />
+  const isFocused = useIsFocused()
+
+  useEffect(() => {
+    forceUpdate()
+  }, [isFocused])
+
+  return <ItemsScreenInner {...props} navigation={navigation} refresher={update}/>
 }
 
 

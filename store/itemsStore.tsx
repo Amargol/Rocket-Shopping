@@ -57,6 +57,10 @@ export class Recipe {
   notes: string
   id: string
 
+  get canBeMade() : boolean {
+    return this.requiredIngredients.every((item) => item.isChecked)
+  }
+
   constructor (name : string) {
     this.name = name
     this.requiredIngredients = [];
@@ -70,7 +74,8 @@ export class Recipe {
       requiredIngredients: observable,
       optionalIngredients: observable,
       state: observable,
-      notes: observable
+      notes: observable,
+      canBeMade: computed
     })
   }
 }
