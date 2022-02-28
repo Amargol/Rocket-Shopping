@@ -123,6 +123,7 @@ class ItemsStore {
     this.searchQuery = newQuery
   }
 
+
   addItem(name : string, notes : string) : boolean {
     let nameDoesNotExist = this.items.findIndex((item) => item.name == name) == -1
 
@@ -162,23 +163,24 @@ class ItemsStore {
     this.saveToStore()
   }
 
-  toggleItemCheck(id : string) {
+  updateItem(id : string, name : string, notes : string) {
     let item = this.items.find((item) => item.id == id)
 
     if (item) {
-      item.isChecked = !item.isChecked
-
-      let isChecked = item.isChecked
+      item.name = name
+      item.notes = notes
 
       this.recipes.forEach((recipe) => {
         recipe.optionalIngredients.forEach((item) => {
           if (item.id == id) {
-            item.isChecked = isChecked
+            item.name = name
+            item.notes = notes
           }
         })
         recipe.requiredIngredients.forEach((item) => {
           if (item.id == id) {
-            item.isChecked = isChecked
+            item.name = name
+            item.notes = notes      
           }
         })
       })
@@ -239,62 +241,29 @@ class ItemsStore {
     return true
   }
 
-  moveRecipe (id : string, distance : number) {
-    let i = this.recipes.findIndex((item) => {
-      return item.id == id
-    })
-
-    if (i == -1) {
-      return false
-    }
-
-    if (i + distance < 0) {
-      distance = 0 - i
-    }
-
-    if (i + distance >= this.recipes.length) {
-      distance = this.recipes.length - i
-    }
-
-    let temp = this.recipes[i]
-    let res = this.recipes.filter((_, index) => index !== i)
-
-    res.splice(i + distance, 0, temp)
-
-    this.recipes = res
-
-    this.saveToStore()
-
-    return true
-  }
-
-  updateItem(id : string, name : string, notes : string) {
+  toggleItemCheck(id : string) {
     let item = this.items.find((item) => item.id == id)
 
     if (item) {
-      item.name = name
-      item.notes = notes
+      item.isChecked = !item.isChecked
+
+      let isChecked = item.isChecked
+
+      this.recipes.forEach((recipe) => {
+        recipe.optionalIngredients.forEach((item) => {
+          if (item.id == id) {
+            item.isChecked = isChecked
+          }
+        })
+        recipe.requiredIngredients.forEach((item) => {
+          if (item.id == id) {
+            item.isChecked = isChecked
+          }
+        })
+      })
     }
 
     this.saveToStore()
-  }
-
-  get count() {
-    return this.items.length
-  }
-
-  get sortedItems() {
-    let res = this.items.filter((item) => {
-      return item.name.toLowerCase().indexOf(this.searchQuery.toLowerCase()) >= 0
-    }).sort((a, b) => {
-      if (a.isChecked == b.isChecked) {
-        return 0
-      } else {
-        return a.isChecked ? 1 : -1
-      }
-    })
-
-    return res
   }
 
   addRecipe(name : string) : Recipe | undefined {
@@ -342,6 +311,48 @@ class ItemsStore {
     this.saveToStore()
   }
 
+  updateRecipe(recipe : Recipe, name : string, notes : string) {
+    recipe.name = name
+    recipe.notes = notes
+
+    this.saveToStore()
+  }
+
+  setRecipeState(recipe : Recipe, recipeState : RecipeState) {
+    recipe.state = recipeState
+
+    this.saveToStore()
+  }
+
+  moveRecipe (id : string, distance : number) {
+    let i = this.recipes.findIndex((item) => {
+      return item.id == id
+    })
+
+    if (i == -1) {
+      return false
+    }
+
+    if (i + distance < 0) {
+      distance = 0 - i
+    }
+
+    if (i + distance >= this.recipes.length) {
+      distance = this.recipes.length - i
+    }
+
+    let temp = this.recipes[i]
+    let res = this.recipes.filter((_, index) => index !== i)
+
+    res.splice(i + distance, 0, temp)
+
+    this.recipes = res
+
+    this.saveToStore()
+
+    return true
+  }
+
   addItemToRecipe(item : Item, recipe : Recipe, isRequired : boolean) {
     let canAdd = recipe.requiredIngredients.every((i) => i.id !== item.id) && recipe.optionalIngredients.every((i) => i.id !== item.id)
 
@@ -360,17 +371,22 @@ class ItemsStore {
     return true
   }
 
-  setRecipeState(recipe : Recipe, recipeState : RecipeState) {
-    recipe.state = recipeState
-
-    this.saveToStore()
+  get count() {
+    return this.items.length
   }
 
-  updateRecipe(recipe : Recipe, name : string, notes : string) {
-    recipe.name = name
-    recipe.notes = notes
+  get sortedItems() {
+    let res = this.items.filter((item) => {
+      return item.name.toLowerCase().indexOf(this.searchQuery.toLowerCase()) >= 0
+    }).sort((a, b) => {
+      if (a.isChecked == b.isChecked) {
+        return 0
+      } else {
+        return a.isChecked ? 1 : -1
+      }
+    })
 
-    this.saveToStore()
+    return res
   }
 
   saveToStore() {
