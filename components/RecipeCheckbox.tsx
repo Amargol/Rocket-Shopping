@@ -15,7 +15,7 @@ import BouncyCheckbox from 'react-native-bouncy-checkbox';
 import * as Haptics from 'expo-haptics';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { Entypo, FontAwesome5 } from '@expo/vector-icons';
+import { Entypo, FontAwesome, FontAwesome5, Ionicons } from '@expo/vector-icons';
 
 
 interface RecipeCheckboxProps {
@@ -38,7 +38,7 @@ class RecipeCheckboxInner extends Component<RecipeCheckboxProps, RecipeCheckboxS
   constructor(props : RecipeCheckboxProps) {
     super(props);
     this.state = {
-      isOpen: false,
+      isOpen: true,
     }
     this.openingModal = false
     this.width = Dimensions.get('window').width
@@ -78,6 +78,9 @@ class RecipeCheckboxInner extends Component<RecipeCheckboxProps, RecipeCheckboxS
   render() {
     let recipe = this.props.recipe
     let canBeMade = recipe.requiredIngredients.every((item) => item.isChecked)
+    let checkedOptionalItems = recipe.optionalIngredients.filter((item) => item.isChecked)
+    let textWidth = this.width - 100
+    let descriptionSpacing = 89
 
     return (
       <ScrollView
@@ -103,21 +106,50 @@ class RecipeCheckboxInner extends Component<RecipeCheckboxProps, RecipeCheckboxS
               <FontAwesome5 name={this.state.isOpen ? "chevron-up" : "chevron-down"} size={25} color="#687784" />
             </Pressable>
             <Pressable onPress={this.onPress}>
-              <Checkbox style={styles.checkbox} value={canBeMade} onValueChange={this.onPress}/>
+              {/* <Checkbox style={styles.checkbox} value={canBeMade} onValueChange={this.onPress}/> */}
+              <Ionicons name={canBeMade ? "square" : "square-outline"} size={35} color={canBeMade ? "green" : "#BA2F2A"} style={styles.checkbox}/>
             </Pressable>
             <Pressable onPress={this.onPress}>
-              <Text style={[styles.txt, {width: this.width - 95}]} >{recipe.name}</Text>
+              <Text style={[styles.txt, {width: textWidth}]} >{recipe.name}</Text>
             </Pressable>
           </View>
 
-          {
+          { // Show optional ingredients in accordion
             this.state.isOpen && canBeMade &&
-            <View style={{width: this.width - 95, marginLeft: 83, marginBottom: 10}}>
+            <View style={{width: textWidth, marginLeft: descriptionSpacing, marginBottom: 10}}>
               {
-                recipe.optionalIngredients.filter((item) => item.isChecked).map((item) => {
+                checkedOptionalItems.length !== 0 &&
+                <Text style={styles.itemsText}>With:</Text>
+              }
+
+              {
+                checkedOptionalItems.map((item) => {
                   return (
                     <Pressable onPress={this.onPress} key={item.id}>
-                      <Text style={styles.itemsText}>{item.name}</Text>
+                      <Text style={styles.itemsText}>&#8226; {item.name}</Text>
+                    </Pressable>
+                  )
+                })
+              }
+
+              {
+                checkedOptionalItems.length == 0 &&
+                <View>
+                  <Text style={styles.itemsText}>There are no optional items in this recipe that are currently checked</Text>
+                </View>
+              }
+            </View>
+          }
+
+          { // Show missing ingredients in accordion
+            this.state.isOpen && !canBeMade &&
+            <View style={{width: textWidth, marginLeft: descriptionSpacing, marginBottom: 10}}>
+              <Text style={styles.itemsText}>Missing:</Text>
+              {
+                recipe.requiredIngredients.filter((item) => !item.isChecked).map((item) => {
+                  return (
+                    <Pressable onPress={this.onPress} key={item.id}>
+                      <Text style={styles.itemsText}>&#8226; {item.name}</Text>
                     </Pressable>
                   )
                 })
@@ -154,11 +186,10 @@ const styles = StyleSheet.create({
     color: "white"
   },
   checkbox: {
-    width: 30,
-    height: 30,
-    marginHorizontal: 10
+    marginHorizontal: 10,
+    // opacity: .8,
   },
   itemsText: {
-    color: "gray",
+    color: "#687784",
   }
 });
