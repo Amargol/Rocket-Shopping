@@ -77,6 +77,7 @@ class RecipeCheckboxInner extends Component<RecipeCheckboxProps, RecipeCheckboxS
 
   render() {
     let recipe = this.props.recipe
+    let canBeMade = recipe.requiredIngredients.every((item) => item.isChecked)
 
     return (
       <ScrollView
@@ -102,18 +103,18 @@ class RecipeCheckboxInner extends Component<RecipeCheckboxProps, RecipeCheckboxS
               <FontAwesome5 name={this.state.isOpen ? "chevron-up" : "chevron-down"} size={25} color="#687784" />
             </Pressable>
             <Pressable onPress={this.onPress}>
-              <Checkbox style={styles.checkbox} value={recipe.requiredIngredients.every((item) => item.isChecked)} onValueChange={this.onPress}/>
+              <Checkbox style={styles.checkbox} value={canBeMade} onValueChange={this.onPress}/>
             </Pressable>
             <Pressable onPress={this.onPress}>
-              <Text style={[styles.txt, {width: this.width - 90}]} >{recipe.name}</Text>
+              <Text style={[styles.txt, {width: this.width - 95}]} >{recipe.name}</Text>
             </Pressable>
           </View>
 
           {
-            this.state.isOpen &&
-            <View style={{width: this.width - 90, marginLeft: 83}}>
+            this.state.isOpen && canBeMade &&
+            <View style={{width: this.width - 95, marginLeft: 83, marginBottom: 10}}>
               {
-                recipe.optionalIngredients.map((item) => {
+                recipe.optionalIngredients.filter((item) => item.isChecked).map((item) => {
                   return (
                     <Pressable onPress={this.onPress} key={item.id}>
                       <Text style={styles.itemsText}>{item.name}</Text>
@@ -158,6 +159,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 10
   },
   itemsText: {
-    color: "white",
+    color: "gray",
   }
 });

@@ -84,29 +84,7 @@ class ItemsScreenInner extends Component<RecipesScreenProps> {
     return (
       <KeyboardAvoidingView style={styles.container} behavior="padding" keyboardVerticalOffset={90}>
         <ScrollView style={[styles.container, {marginTop: 10}]}>
-          {/* <CheckList query={itemsStore.searchQuery} /> */}
-          {
-            itemsStore.recipes.map((recipe) => (
-              <TouchableOpacity key={recipe.id} onPress={() => {this.openRecipe(recipe)}} activeOpacity={.8}>
-                <View style={styles.recipeCard}>
-                  <View>
-                    <FontAwesome5 name="check" size={28} color="green" />
-                  </View>
-                  <View>
-                    <Text style={styles.recipeTitle}>{recipe.name}</Text>
-                    <View style={styles.recipeDetails}>
-                      {
-                        recipe.optionalIngredients.map((item) => {
-                          return <Text style={styles.recipeDetailText} key={item.id}>{item.name}</Text>
-                        })
-                      }
-                    </View>
-                  </View>
-                </View>
-              </TouchableOpacity>
-            ))
-          }
-          <View style={{height: 50}}></View>
+          <View style={{height: 10}}></View>
           {
             itemsStore.recipes.map((recipe) => (
               <RecipeCheckbox recipe={recipe} key={recipe.id}/>
