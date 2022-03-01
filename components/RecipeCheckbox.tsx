@@ -114,32 +114,32 @@ class RecipeCheckboxInner extends Component<RecipeCheckboxProps, RecipeCheckboxS
             </Pressable>
           </View>
 
-          { // Show optional ingredients in accordion
-            this.state.isOpen && canBeMade &&
-            <View style={{width: textWidth, marginLeft: descriptionSpacing, marginBottom: 10}}>
-              {
-                checkedOptionalItems.length !== 0 &&
-                <Text style={styles.itemsText}>With:</Text>
-              }
+          <Pressable onPress={this.onPress}>
+            { // Show optional ingredients in accordion
+              this.state.isOpen && canBeMade &&
+              <View style={{width: textWidth, marginLeft: descriptionSpacing, marginBottom: 10}}>
+                {
+                  checkedOptionalItems.length !== 0 &&
+                  <Text style={styles.itemsText}>With:</Text>
+                }
 
-              {
-                checkedOptionalItems.map((item) => {
-                  return (
-                    <Pressable onPress={this.onPress} key={item.id}>
-                      <Text style={styles.itemsText}>&#8226; {item.name}</Text>
-                    </Pressable>
-                  )
-                })
-              }
+                {
+                  checkedOptionalItems.map((item) => {
+                    return (
+                        <Text key={item.id} style={styles.itemsText}>&#8226; {item.name}</Text>
+                    )
+                  })
+                }
 
-              {
-                checkedOptionalItems.length == 0 &&
-                <View>
-                  <Text style={styles.itemsText}>There are no optional items in this recipe that are currently checked</Text>
-                </View>
-              }
-            </View>
-          }
+                {
+                  checkedOptionalItems.length == 0 &&
+                  <View>
+                    <Text style={styles.itemsText}>There are no optional items in this recipe that are currently checked, but all the required items are checked</Text>
+                  </View>
+                }
+              </View>
+            }
+          </Pressable>
 
           { // Show missing ingredients in accordion
             this.state.isOpen && !canBeMade &&
