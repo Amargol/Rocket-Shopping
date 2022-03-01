@@ -23,7 +23,11 @@ interface RecipeCheckboxProps {
   navigation : NativeStackNavigationProp<any, string>
 }
 
-class RecipeCheckboxInner extends Component<RecipeCheckboxProps> {
+interface RecipeCheckboxState {
+  isOpen : boolean
+}
+
+class RecipeCheckboxInner extends Component<RecipeCheckboxProps, RecipeCheckboxState> {
   openingModal: boolean;
   width: number;
 
@@ -33,14 +37,14 @@ class RecipeCheckboxInner extends Component<RecipeCheckboxProps> {
 
   constructor(props : RecipeCheckboxProps) {
     super(props);
-
+    this.state = {
+      isOpen: false,
+    }
     this.openingModal = false
     this.width = Dimensions.get('window').width
   }
 
-  onPress = () => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
-
+  toggleIsOpen = () => {
     LayoutAnimation.configureNext({
       duration: 100,
       create: {
@@ -56,7 +60,19 @@ class RecipeCheckboxInner extends Component<RecipeCheckboxProps> {
       }
     })
 
+    this.setState({isOpen: !this.state.isOpen})
+  }
+
+  onPress = () => {
+    // Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
+
+
+
     // Navigate
+    this.props.navigation.push("Edit Recipe", {
+      recipe: this.props.recipe,
+      editing: false
+    })
   }
 
   render() {
@@ -64,6 +80,7 @@ class RecipeCheckboxInner extends Component<RecipeCheckboxProps> {
 
     return (
       <ScrollView
+        style={styles.parent}
         keyboardShouldPersistTaps="always"
         horizontal={true}
         onScroll={(e) => {
@@ -79,13 +96,36 @@ class RecipeCheckboxInner extends Component<RecipeCheckboxProps> {
         }}
         scrollEventThrottle={16}
       >
-        <Pressable onPress={this.onPress} style={{width: this.width - 40}}>
+        <View>
           <View style={styles.container}>
-            <FontAwesome5 name="chevron-down" size={25} color="#687784" />
-            <Checkbox style={styles.checkbox} value={recipe.requiredIngredients.every((item) => item.isChecked)} onValueChange={this.onPress}/>
-            <Text style={styles.txt}>{recipe.name}</Text>
+            <Pressable onPress={this.toggleIsOpen}>
+              <FontAwesome5 name={this.state.isOpen ? "chevron-up" : "chevron-down"} size={25} color="#687784" />
+            </Pressable>
+            <Pressable onPress={this.onPress}>
+              <Checkbox style={styles.checkbox} value={recipe.requiredIngredients.every((item) => item.isChecked)} onValueChange={this.onPress}/>
+            </Pressable>
+            <Pressable onPress={this.onPress}>
+              <Text style={[styles.txt, {width: this.width - 90}]} >{recipe.name}</Text>
+            </Pressable>
           </View>
-        </Pressable>
+
+          {
+            this.state.isOpen &&
+            <View style={{width: this.width - 90, marginLeft: 83}}>
+              {
+                recipe.optionalIngredients.map((item) => {
+                  return (
+                    <Pressable onPress={this.onPress} key={item.id}>
+                      <Text style={styles.itemsText}>{item.name}</Text>
+                    </Pressable>
+                  )
+                })
+              }
+            </View>
+          }
+
+
+        </View>
       </ScrollView>
     );
   }
@@ -98,6 +138,11 @@ export default function RecipeCheckbox(props : any) {
 }
 
 const styles = StyleSheet.create({
+  parent: {
+    // backgroundColor: "#161616",
+    // borderBottomColor: "black",
+    // borderBottomWidth: 5
+  },
   container: {
     flexDirection: "row",
     alignItems: "center",
@@ -111,5 +156,8 @@ const styles = StyleSheet.create({
     width: 30,
     height: 30,
     marginHorizontal: 10
+  },
+  itemsText: {
+    color: "white",
   }
 });
