@@ -80,7 +80,7 @@ class RecipeCheckboxInner extends Component<RecipeCheckboxProps, RecipeCheckboxS
     let canBeMade = recipe.requiredIngredients.every((item) => item.isChecked)
     let checkedOptionalItems = recipe.optionalIngredients.filter((item) => item.isChecked)
     let textWidth = this.width - 100
-    let descriptionSpacing = 89
+    let descriptionSpacing = 78
 
     return (
       <ScrollView
@@ -107,7 +107,20 @@ class RecipeCheckboxInner extends Component<RecipeCheckboxProps, RecipeCheckboxS
               <Pressable onPress={this.toggleIsOpen}>
                 <FontAwesome5 name={this.state.isOpen ? "chevron-up" : "chevron-down"} size={25} color="#687784" style={{paddingHorizontal: 11, paddingVertical: 7}} />
               </Pressable>
-              <FontAwesome name={canBeMade ? "check-square" : "minus-square"} size={28} color={canBeMade ? "green" : "#BA2F2A"} style={styles.checkbox}/>
+              <View style={[
+                {
+                  width: 25,
+                  height: 25,
+                  backgroundColor: canBeMade ? "green" : "#BA2F2A",
+                  borderRadius: 5,
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  paddingLeft: canBeMade ? 0 : 0.5,
+                }, styles.checkbox]
+              }>
+                <FontAwesome name={canBeMade ? "check" : "times"} size={canBeMade ? 17 : 17} color={"white"}/>
+              </View>
               <Text style={[styles.recipeName, {width: textWidth}]} >{recipe.name}</Text>
             </View>
 
