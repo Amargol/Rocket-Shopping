@@ -100,21 +100,17 @@ class RecipeCheckboxInner extends Component<RecipeCheckboxProps, RecipeCheckboxS
         }}
         scrollEventThrottle={16}
       >
-        <View>
-          <View style={styles.container}>
-            <Pressable onPress={this.toggleIsOpen}>
-              <FontAwesome5 name={this.state.isOpen ? "chevron-up" : "chevron-down"} size={25} color="#687784" />
-            </Pressable>
-            <Pressable onPress={this.onPress}>
-              {/* <Checkbox style={styles.checkbox} value={canBeMade} onValueChange={this.onPress}/> */}
-              <Ionicons name={canBeMade ? "square" : "square-outline"} size={35} color={canBeMade ? "green" : "#BA2F2A"} style={styles.checkbox}/>
-            </Pressable>
-            <Pressable onPress={this.onPress}>
-              <Text style={[styles.txt, {width: textWidth}]} >{recipe.name}</Text>
-            </Pressable>
-          </View>
+        <Pressable onPress={this.onPress} >
 
-          <Pressable onPress={this.onPress}>
+          <View>
+            <View style={styles.container}>
+              <Pressable onPress={this.toggleIsOpen}>
+                <FontAwesome5 name={this.state.isOpen ? "chevron-up" : "chevron-down"} size={25} color="#687784" style={{paddingHorizontal: 11, paddingVertical: 7}} />
+              </Pressable>
+              <FontAwesome name={canBeMade ? "check-square" : "minus-square"} size={28} color={canBeMade ? "green" : "#BA2F2A"} style={styles.checkbox}/>
+              <Text style={[styles.recipeName, {width: textWidth}]} >{recipe.name}</Text>
+            </View>
+
             { // Show optional ingredients in accordion
               this.state.isOpen && canBeMade &&
               <View style={{width: textWidth, marginLeft: descriptionSpacing, marginBottom: 10}}>
@@ -139,30 +135,28 @@ class RecipeCheckboxInner extends Component<RecipeCheckboxProps, RecipeCheckboxS
                 }
               </View>
             }
-          </Pressable>
 
-          { // Show missing ingredients in accordion
-            this.state.isOpen && !canBeMade &&
-            <View style={{width: textWidth, marginLeft: descriptionSpacing, marginBottom: 10}}>
-              <Text style={styles.itemsText}>Missing:</Text>
-              {
-                recipe.requiredIngredients.filter((item) => !item.isChecked).map((item) => {
-                  return (
-                    <Pressable onPress={this.onPress} key={item.id}>
-                      <Text style={styles.itemsText}>&#8226; {item.name}</Text>
-                    </Pressable>
-                  )
-                })
-              }
-            </View>
-          }
-
-
-        </View>
+            { // Show missing ingredients in accordion
+              this.state.isOpen && !canBeMade &&
+              <View style={{width: textWidth, marginLeft: descriptionSpacing, marginBottom: 10}}>
+                <Text style={styles.itemsText}>Missing:</Text>
+                {
+                  recipe.requiredIngredients.filter((item) => !item.isChecked).map((item) => {
+                    return (
+                      <Text key={item.id} style={styles.itemsText}>&#8226; {item.name}</Text>
+                    )
+                  })
+                }
+              </View>
+            }
+          </View>
+        </Pressable>
       </ScrollView>
     );
   }
 }
+
+
 
 export default function RecipeCheckbox(props : any) {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
@@ -179,15 +173,16 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
     alignItems: "center",
-    marginHorizontal: 11,
-    paddingVertical: 5,
+    marginRight: 11,
+    // paddingVertical: 5,
   },
-  txt: {
-    color: "white"
+  recipeName: {
+    color: "white",
+    paddingVertical: 5
   },
   checkbox: {
-    marginHorizontal: 10,
-    // opacity: .8,
+    marginRight: 10,
+    // backgroundColor: "white"
   },
   itemsText: {
     color: "#687784",
