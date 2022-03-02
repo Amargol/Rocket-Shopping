@@ -38,7 +38,7 @@ class RecipeCheckboxInner extends Component<RecipeCheckboxProps, RecipeCheckboxS
   constructor(props : RecipeCheckboxProps) {
     super(props);
     this.state = {
-      isOpen: true,
+      isOpen: false,
     }
     this.openingModal = false
     this.width = Dimensions.get('window').width
