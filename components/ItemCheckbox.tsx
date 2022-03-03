@@ -15,6 +15,7 @@ import BouncyCheckbox from 'react-native-bouncy-checkbox';
 import * as Haptics from 'expo-haptics';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import Checkbox2 from './Checkbox'
 
 
 interface ItemCheckboxProps {
@@ -92,7 +93,8 @@ class ItemCheckboxInner extends Component<ItemCheckboxProps, ItemCheckboxState> 
       >
         <Pressable onPress={this.onPress} style={{width: this.width - 40}}>
           <View style={styles.container}>
-            <Checkbox style={styles.checkbox} value={item.isChecked} onValueChange={this.onPress}/>
+            {/* <Checkbox style={styles.checkbox} value={item.isChecked} onValueChange={this.onPress}/> */}
+            <Checkbox2 isChecked={item.isChecked} />
             <Text style={styles.txt}>{this.props.item.name}</Text>
           </View>
         </Pressable>
