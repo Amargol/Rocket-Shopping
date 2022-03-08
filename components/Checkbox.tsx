@@ -16,35 +16,65 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { FontAwesome } from '@expo/vector-icons';
 
+// Must be in the same order as settings map
+export enum CheckboxType {
+  Checked = 0,
+  Unchecked = 1,
+  Delete = 2
+}
+
+interface CheckboxSettings {
+  backgroundColor: string,
+  borderColor: string,
+  icon: keyof typeof FontAwesome.glyphMap,
+}
+
+const SETTINGSMAP : CheckboxSettings[] = [
+  {
+    backgroundColor: "#3377F6",
+    borderColor: "#3377F6",
+    icon: "check"
+  },
+  {
+    backgroundColor: "transparent",
+    borderColor: "#687784",
+    icon: "times"
+  },
+  {
+    backgroundColor: "#BA2F2A",
+    borderColor: "#BA2F2A",
+    icon: "times"
+  }
+]
 
 interface ItemCheckboxProps {
-  isChecked : boolean,
+  type : CheckboxType,
 }
 
 export default function Checkbox(props : ItemCheckboxProps) {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
 
-  let canBeMade = props.isChecked
+  let settings = SETTINGSMAP[props.type]
 
   return (
     <View style={[
       {
         // width: 10,
         // height: 10,
-        backgroundColor: canBeMade ? "#3377F6" : "transparent",
+        backgroundColor: settings.backgroundColor,
         borderWidth: 2,
         // padding: 5,
-        borderColor: canBeMade ? "#3377F6" : "#687784",
+        borderColor: settings.borderColor,
         borderRadius: 5,
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        paddingLeft: canBeMade ? 0 : 0.5,
+        paddingLeft: props.type === CheckboxType.Checked ? 0 : 0.5,
       }, styles.checkbox]
     }>
       {
-        canBeMade &&
-        <FontAwesome name={canBeMade ? "check" : "times"} size={canBeMade ? 22 : 22} color={"white"}/>
+        props.type !== CheckboxType.Unchecked &&
+        <FontAwesome name={settings.icon} size={22} color={"white"}/>
       }
     </View>
   )

@@ -94,7 +94,7 @@ class ItemsScreenInner extends Component<RecipesScreenProps> {
         <View style={styles.searchContainer}>
           <TouchableOpacity onPress={this.addItem} activeOpacity={.5}>
             <View style={styles.addButton}>
-              <FontAwesome5 name="plus" size={28} color="#23A9DD" />
+              <FontAwesome5 name="plus" size={28} color="#3377F6" />
             </View>
           </TouchableOpacity>
           <TextInput
@@ -107,7 +107,7 @@ class ItemsScreenInner extends Component<RecipesScreenProps> {
           />
           <TouchableOpacity onPress={this.checkFirstItem} activeOpacity={.5}>
             <View style={styles.addButton}>
-              <Entypo name="shuffle" size={28} color="#23A9DD" />
+              <Entypo name="shuffle" size={28} color="#3377F6" />
             </View>
           </TouchableOpacity>
         </View>

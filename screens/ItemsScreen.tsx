@@ -74,7 +74,7 @@ class ItemsScreenInner extends Component<ItemsScreenProps> {
         <View style={styles.searchContainer}>
           <TouchableOpacity onPress={this.addItem} activeOpacity={.5}>
             <View style={styles.addButton}>
-              <FontAwesome5 name="plus" size={28} color="#23A9DD" />
+              <FontAwesome5 name="plus" size={28} color="#3377F6" />
             </View>
           </TouchableOpacity>
           <TextInput
@@ -87,7 +87,7 @@ class ItemsScreenInner extends Component<ItemsScreenProps> {
           />
           <TouchableOpacity onPress={this.checkFirstItem} activeOpacity={.5}>
             <View style={styles.addButton}>
-              <FontAwesome5 name="check" size={28} color="#23A9DD" />
+              <FontAwesome5 name="check" size={28} color="#3377F6" />
             </View>
           </TouchableOpacity>
         </View>

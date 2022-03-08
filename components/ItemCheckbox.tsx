@@ -9,19 +9,19 @@ import {
   View,
   ScrollView
 } from 'react-native';
-import { Item, itemsStore, ItemState } from '../store/itemsStore';
-import Checkbox from 'expo-checkbox';
+import { Item, itemsStore, ItemState, Recipe } from '../store/itemsStore';
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
 import * as Haptics from 'expo-haptics';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import Checkbox2 from './Checkbox'
+import Checkbox, { CheckboxType } from './Checkbox'
 
 
 interface ItemCheckboxProps {
   item : Item,
+  isEditing: Recipe | undefined,
   navigation : NativeStackNavigationProp<any, string>,
-  callback : () => {} | undefined
+  callback : () => {} | undefined,
 }
 
 interface ItemCheckboxState {
@@ -63,7 +63,13 @@ class ItemCheckboxInner extends Component<ItemCheckboxProps, ItemCheckboxState> 
       }
     })
 
-    itemsStore.toggleItemCheck(this.props.item.id)
+    // Perform action
+    if (this.props.isEditing) {
+      itemsStore.removeItemFromRecipe(this.props.item, this.props.isEditing)
+    } else {
+      itemsStore.toggleItemCheck(this.props.item.id)
+    }
+
     if (this.props.callback) {
       this.props.callback()
     }
@@ -93,8 +99,7 @@ class ItemCheckboxInner extends Component<ItemCheckboxProps, ItemCheckboxState> 
       >
         <Pressable onPress={this.onPress} style={{width: this.width - 40}}>
           <View style={styles.container}>
-            {/* <Checkbox style={styles.checkbox} value={item.isChecked} onValueChange={this.onPress}/> */}
-            <Checkbox2 isChecked={item.isChecked} />
+            <Checkbox type={this.props.isEditing ? CheckboxType.Delete : (item.isChecked ? CheckboxType.Checked : CheckboxType.Unchecked)} />
             <Text style={styles.txt}>{this.props.item.name}</Text>
           </View>
         </Pressable>

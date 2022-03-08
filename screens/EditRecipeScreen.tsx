@@ -137,7 +137,7 @@ function InnerEditRecipeScreen(props : any) {
         <Text style={styles.headText}>Required Items</Text>
         {
           requiredItems.map((item) => {
-            return <ItemCheckbox item={item} key={item.id} navigation={navigation} callback={forceUpdate}/>
+            return <ItemCheckbox item={item} key={item.id} isEditing={editing ? recipe : undefined} navigation={navigation} callback={forceUpdate}/>
           })
         }
         {
@@ -159,7 +159,7 @@ function InnerEditRecipeScreen(props : any) {
         <Text style={styles.headText}>Optional Items</Text>
         {
           optionalItems.map((item) => {
-            return <ItemCheckbox item={item} key={item.id} navigation={navigation} callback={forceUpdate}/>
+            return <ItemCheckbox item={item} key={item.id} isEditing={editing ? recipe : undefined} navigation={navigation} callback={forceUpdate}/>
           })
         }
         {

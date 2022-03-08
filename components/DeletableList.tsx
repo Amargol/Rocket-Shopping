@@ -10,8 +10,6 @@ import {
   Dimensions
 } from 'react-native';
 import { Item, itemsStore, ItemState } from '../store/itemsStore';
-import Checkbox from 'expo-checkbox';
-import ItemCheckbox from './ItemCheckbox';
 import { AntDesign, Entypo } from '@expo/vector-icons'; 
 import * as Haptics from 'expo-haptics';
 

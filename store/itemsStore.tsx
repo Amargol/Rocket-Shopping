@@ -119,6 +119,7 @@ class ItemsStore {
       setRecipeState: action,
       moveRecipe: action,
       addItemToRecipe: action,
+      removeItemFromRecipe: action,
       count: computed,
       sortedItems: computed,
     })
@@ -359,6 +360,7 @@ class ItemsStore {
   }
 
   addItemToRecipe(item : Item, recipe : Recipe, isRequired : boolean) {
+    // Make sure item is not already in recipe
     let canAdd = recipe.requiredIngredients.every((i) => i.id !== item.id) && recipe.optionalIngredients.every((i) => i.id !== item.id)
 
     if (!canAdd) {
@@ -374,6 +376,11 @@ class ItemsStore {
     this.saveToStore()
 
     return true
+  }
+
+  removeItemFromRecipe(item : Item, recipe : Recipe) {
+    recipe.optionalIngredients = recipe.optionalIngredients.filter(i => i.id != item.id)
+    recipe.requiredIngredients = recipe.requiredIngredients.filter(i => i.id != item.id)
   }
 
   get count() {
