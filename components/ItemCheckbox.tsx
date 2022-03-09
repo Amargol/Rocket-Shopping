@@ -7,7 +7,9 @@ import {
   StyleSheet,
   Text,
   View,
-  ScrollView
+  ScrollView,
+  NativeSyntheticEvent,
+  NativeScrollEvent
 } from 'react-native';
 import { Item, itemsStore, ItemState, Recipe } from '../store/itemsStore';
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
@@ -32,10 +34,6 @@ class ItemCheckboxInner extends Component<ItemCheckboxProps, ItemCheckboxState> 
   openingModal: boolean;
   width: number;
 
-  // shouldComponentUpdate (nextProps : ItemCheckboxProps) {
-  //   return this.props.item.state != nextProps.item.state
-  // }
-
   constructor(props : ItemCheckboxProps) {
     super(props);
     this.state = {
@@ -45,7 +43,24 @@ class ItemCheckboxInner extends Component<ItemCheckboxProps, ItemCheckboxState> 
     this.width = Dimensions.get('window').width
   }
 
+  onSwipeRight = () => {
+    // Edit item
+    this.props.navigation.push("Edit Item", {
+      item: this.props.item
+    })
+  }
+
+  onSwipeLeft = () => {
+    // Move to low priority
+  }
+
+  onLongPress = () => {
+    // Open Menu
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
+  }
+
   onPress = () => {
+    // Check item
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
 
     LayoutAnimation.configureNext({
@@ -75,32 +90,38 @@ class ItemCheckboxInner extends Component<ItemCheckboxProps, ItemCheckboxState> 
     }
   }
 
+  onScroll = (e : NativeSyntheticEvent<NativeScrollEvent>) => {
+    const xOffset = e.nativeEvent.contentOffset.x;
+    if (xOffset < -30 && !this.openingModal) {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
+      this.openingModal = true
+      this.onSwipeRight()
+    }
+    if (xOffset > 30 && !this.openingModal) {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
+      this.openingModal = true
+      this.onSwipeLeft()
+    }
+    if ((xOffset < 5 && xOffset > -5) && this.openingModal) {
+      this.openingModal = false
+    }
+  }
+
   render() {
-    let item = this.props.item
+    let {item, isEditing} = this.props
+    let checkboxType = isEditing ? CheckboxType.Delete : (item.isChecked ? CheckboxType.Checked : CheckboxType.Unchecked)
 
     return (
       <ScrollView
         keyboardShouldPersistTaps="always"
         horizontal={true}
-        onScroll={(e) => {
-          const xOffset = e.nativeEvent.contentOffset.x;
-          if (xOffset < -30 && !this.openingModal) {
-            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
-            this.openingModal = true
-            this.props.navigation.push("Edit Item", {
-              item: item
-            })
-          }
-          if (xOffset == 0 && this.openingModal) {
-            this.openingModal = false
-          }
-        }}
+        onScroll={this.onScroll}
         scrollEventThrottle={16}
       >
-        <Pressable onPress={this.onPress} style={{width: this.width - 40}}>
+        <Pressable onPress={this.onPress} onLongPress={this.onLongPress} delayLongPress={250} style={{width: this.width - 40}}>
           <View style={styles.container}>
-            <Checkbox type={this.props.isEditing ? CheckboxType.Delete : (item.isChecked ? CheckboxType.Checked : CheckboxType.Unchecked)} />
-            <Text style={styles.txt}>{this.props.item.name}</Text>
+            <Checkbox type={checkboxType} />
+            <Text style={styles.txt}>{item.name}</Text>
           </View>
         </Pressable>
       </ScrollView>

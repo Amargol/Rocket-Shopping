@@ -7,15 +7,15 @@ import {
   StyleSheet,
   Text,
   View,
-  ScrollView
+  ScrollView,
+  NativeSyntheticEvent,
+  NativeScrollEvent
 } from 'react-native';
-import { Item, itemsStore, ItemState, Recipe } from '../store/itemsStore';
-import Checkbox from 'expo-checkbox';
-import BouncyCheckbox from 'react-native-bouncy-checkbox';
+import { Recipe } from '../store/itemsStore';
 import * as Haptics from 'expo-haptics';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { Entypo, FontAwesome, FontAwesome5, Ionicons } from '@expo/vector-icons';
+import { FontAwesome, FontAwesome5 } from '@expo/vector-icons';
 
 
 interface RecipeCheckboxProps {
@@ -31,10 +31,6 @@ class RecipeCheckboxInner extends Component<RecipeCheckboxProps, RecipeCheckboxS
   openingModal: boolean;
   width: number;
 
-  // shouldComponentUpdate (nextProps : ItemCheckboxProps) {
-  //   return this.props.item.state != nextProps.item.state
-  // }
-
   constructor(props : RecipeCheckboxProps) {
     super(props);
     this.state = {
@@ -42,6 +38,26 @@ class RecipeCheckboxInner extends Component<RecipeCheckboxProps, RecipeCheckboxS
     }
     this.openingModal = false
     this.width = Dimensions.get('window').width
+  }
+
+  onSwipeRight = () => {
+    // Move to pinned
+  }
+
+  onSwipeLeft = () => {
+    // Move to low priority
+  }
+
+  onPress = () => {
+    // Check item
+    this.props.navigation.push("Edit Recipe", {
+      recipe: this.props.recipe,
+      editing: false
+    })
+  }
+  
+  onLongPress = () => {
+    // Open menu
   }
 
   toggleIsOpen = () => {
@@ -63,23 +79,32 @@ class RecipeCheckboxInner extends Component<RecipeCheckboxProps, RecipeCheckboxS
     this.setState({isOpen: !this.state.isOpen})
   }
 
-  onPress = () => {
-    // Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
-
-
-
-    // Navigate
-    this.props.navigation.push("Edit Recipe", {
-      recipe: this.props.recipe,
-      editing: false
-    })
+  onScroll = (e : NativeSyntheticEvent<NativeScrollEvent>) => {
+    const xOffset = e.nativeEvent.contentOffset.x;
+    if (xOffset < -30 && !this.openingModal) {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
+      this.openingModal = true
+      this.onSwipeRight()
+    }
+    if (xOffset > 30 && !this.openingModal) {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
+      this.openingModal = true
+      this.onSwipeLeft()
+    }
+    if ((xOffset < 5 && xOffset > -5) && this.openingModal) {
+      this.openingModal = false
+    }
   }
 
   render() {
     let recipe = this.props.recipe
     let canBeMade = recipe.requiredIngredients.every((item) => item.isChecked)
     let checkedOptionalItems = recipe.optionalIngredients.filter((item) => item.isChecked)
+
+    // Max width the text can be
     let textWidth = this.width - 100
+
+    // How much to indent description
     let descriptionSpacing = 78
 
     return (
@@ -100,7 +125,7 @@ class RecipeCheckboxInner extends Component<RecipeCheckboxProps, RecipeCheckboxS
         }}
         scrollEventThrottle={16}
       >
-        <Pressable onPress={this.onPress} >
+        <Pressable onPress={this.onPress} onLongPress={this.onLongPress}>
 
           <View>
             <View style={styles.container}>
@@ -135,7 +160,7 @@ class RecipeCheckboxInner extends Component<RecipeCheckboxProps, RecipeCheckboxS
                 {
                   checkedOptionalItems.map((item) => {
                     return (
-                        <Text key={item.id} style={styles.itemsText}>&#8226; {item.name}</Text>
+                      <Text key={item.id} style={styles.itemsText}>&#8226; {item.name}</Text>
                     )
                   })
                 }

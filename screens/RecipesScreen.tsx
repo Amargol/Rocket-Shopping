@@ -1,10 +1,6 @@
 import React, { Component, useEffect, useReducer } from "react";
-import { Alert, Button, Keyboard, KeyboardAvoidingView, LayoutAnimation, Pressable, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { KeyboardAvoidingView, LayoutAnimation, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
 import { Entypo, FontAwesome5 } from '@expo/vector-icons'; 
-
-
-import EditScreenInfo from '../components/EditScreenInfo';
-import CheckList from "../components/CheckList";
 import { itemsStore, Recipe } from "../store/itemsStore";
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -20,7 +16,7 @@ interface RecipesScreenProps {
 
 // lightColor="#eee" darkColor="rgba(255,255,255,0.1)" 
 @observer
-class ItemsScreenInner extends Component<RecipesScreenProps> {
+class RecipesScreenInner extends Component<RecipesScreenProps> {
   
 
   constructor(props : any) {
@@ -116,7 +112,7 @@ class ItemsScreenInner extends Component<RecipesScreenProps> {
   }
 }
 
-export default function ItemsScreen(props : any) {
+export default function RecipesScreen(props : any) {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
   const [update, forceUpdate] = useReducer(x => x + 1, 0);
 
@@ -126,7 +122,7 @@ export default function ItemsScreen(props : any) {
     forceUpdate()
   }, [isFocused])
 
-  return <ItemsScreenInner {...props} navigation={navigation} refresher={update}/>
+  return <RecipesScreenInner {...props} navigation={navigation} refresher={update}/>
 }
 
 

@@ -1,15 +1,13 @@
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Alert, LayoutAnimation, Pressable, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
-
 import { Text, View } from '../components/Themed';
-import { RootStackScreenProps } from '../types';
 import { Recipe, itemsStore } from '../store/itemsStore';
 import React, { Component, useEffect, useReducer } from 'react';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import ItemCheckbox from '../components/ItemCheckbox';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { observer } from "mobx-react";
+import ItemCheckbox from '../components/ItemCheckbox';
 
 function InnerEditRecipeScreen(props : any) {
 
@@ -36,6 +34,7 @@ function InnerEditRecipeScreen(props : any) {
       return a.isChecked ? 1 : -1
     }
   })
+  
   const requiredItems = recipe.requiredIngredients.slice()
   .sort((a, b) => {
     if (a.isChecked == b.isChecked) {
@@ -59,9 +58,9 @@ function InnerEditRecipeScreen(props : any) {
       )
     } else {
       if (editing) {
-        // saveNotes()
         itemsStore.updateRecipe(recipe, text, notes)
       }
+
       LayoutAnimation.configureNext({
         duration: 50,
         create: {
@@ -75,7 +74,8 @@ function InnerEditRecipeScreen(props : any) {
           type: LayoutAnimation.Types.linear,
           property: LayoutAnimation.Properties.opacity
         }
-      })  
+      })
+
       onChangeEditing(!editing)
     }
   }
@@ -87,6 +87,7 @@ function InnerEditRecipeScreen(props : any) {
     })
   }
 
+  // Create edit/savebutton in top right
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
@@ -101,6 +102,7 @@ function InnerEditRecipeScreen(props : any) {
     })
   })
 
+  // Change background color
   let inputBackground = editing ? "#252526" : "#161616"
 
   return (
