@@ -9,7 +9,8 @@ import {
   View,
   ScrollView,
   NativeSyntheticEvent,
-  NativeScrollEvent
+  NativeScrollEvent,
+  ActionSheetIOS
 } from 'react-native';
 import { Item, itemsStore, ItemState, Recipe } from '../store/itemsStore';
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
@@ -52,11 +53,44 @@ class ItemCheckboxInner extends Component<ItemCheckboxProps, ItemCheckboxState> 
 
   onSwipeLeft = () => {
     // Move to low priority
+    if (this.props.item.state == ItemState.Disabled) {
+      itemsStore.setItemState(this.props.item.id, ItemState.Standard)
+    } else {
+      itemsStore.setItemState(this.props.item.id, ItemState.Disabled)
+    }
+
+    if (this.props.callback) {
+      this.props.callback()
+    }
   }
 
   onLongPress = () => {
     // Open Menu
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
+    let item = this.props.item
+
+    ActionSheetIOS.showActionSheetWithOptions(
+      {
+        options: ['Cancel', 'View Details', 'Move to Pin', 'Move to Standard', 'Move to Disabled', 'Delete'],
+        destructiveButtonIndex: 5,
+        cancelButtonIndex: 0,
+        userInterfaceStyle: 'dark',
+      },
+      buttonIndex => {
+        if (buttonIndex === 0) {
+          // cancel action
+        } else if (buttonIndex === 1) {
+          this.onSwipeRight()
+        } else if (buttonIndex === 2) {
+          itemsStore.setItemState(item.id, ItemState.Pinned)
+        } else if (buttonIndex === 3) {
+          itemsStore.setItemState(item.id, ItemState.Standard)
+        } else if (buttonIndex === 4) {
+          itemsStore.setItemState(item.id, ItemState.Disabled)
+        } else if (buttonIndex === 5) {
+          itemsStore.removeItem(item.id)
+        }
+      }
+    );
   }
 
   onPress = () => {

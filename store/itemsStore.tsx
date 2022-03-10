@@ -325,6 +325,8 @@ class ItemsStore {
   }
 
   setRecipeState(recipe : Recipe, recipeState : RecipeState) {
+    // Works because there are no other stored objects that reference a recipe
+    // Would not work for item because items are stored in two places. 
     recipe.state = recipeState
 
     this.saveToStore()

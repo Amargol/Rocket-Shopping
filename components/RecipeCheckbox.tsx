@@ -9,9 +9,10 @@ import {
   View,
   ScrollView,
   NativeSyntheticEvent,
-  NativeScrollEvent
+  NativeScrollEvent,
+  ActionSheetIOS
 } from 'react-native';
-import { Recipe } from '../store/itemsStore';
+import { itemsStore, Recipe, RecipeState } from '../store/itemsStore';
 import * as Haptics from 'expo-haptics';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -42,10 +43,12 @@ class RecipeCheckboxInner extends Component<RecipeCheckboxProps, RecipeCheckboxS
 
   onSwipeRight = () => {
     // Move to pinned
+    itemsStore.setRecipeState(this.props.recipe, RecipeState.Pinned)
   }
 
   onSwipeLeft = () => {
     // Move to low priority
+    itemsStore.setRecipeState(this.props.recipe, RecipeState.Disabled)
   }
 
   onPress = () => {
@@ -57,7 +60,32 @@ class RecipeCheckboxInner extends Component<RecipeCheckboxProps, RecipeCheckboxS
   }
   
   onLongPress = () => {
+    let recipe = this.props.recipe
+
     // Open menu
+    ActionSheetIOS.showActionSheetWithOptions(
+      {
+        options: ['Cancel', 'View Details', 'Move to Pin', 'Move to Standard', 'Move to Disabled', 'Delete'],
+        destructiveButtonIndex: 5,
+        cancelButtonIndex: 0,
+        userInterfaceStyle: 'dark',
+      },
+      buttonIndex => {
+        if (buttonIndex === 0) {
+          // cancel action
+        } else if (buttonIndex === 1) {
+          this.onSwipeRight()
+        } else if (buttonIndex === 2) {
+          itemsStore.setRecipeState(recipe, RecipeState.Pinned)
+        } else if (buttonIndex === 3) {
+          itemsStore.setRecipeState(recipe, RecipeState.Standard)
+        } else if (buttonIndex === 4) {
+          itemsStore.setRecipeState(recipe, RecipeState.Disabled)
+        } else if (buttonIndex === 5) {
+          itemsStore.removeRecipe(recipe.id)
+        }
+      }
+    );
   }
 
   toggleIsOpen = () => {
