@@ -26,7 +26,7 @@ function InnerEditRecipeScreen(props : any) {
     forceUpdate()
   }, [isFocused])
 
-  const optionalItems = recipe.optionalIngredients.slice()
+  let optionalItems = recipe.optionalIngredients.slice()
   .sort((a, b) => {
     if (a.isChecked == b.isChecked) {
       return 0
@@ -35,7 +35,7 @@ function InnerEditRecipeScreen(props : any) {
     }
   })
   
-  const requiredItems = recipe.requiredIngredients.slice()
+  let requiredItems = recipe.requiredIngredients.slice()
   .sort((a, b) => {
     if (a.isChecked == b.isChecked) {
       return 0

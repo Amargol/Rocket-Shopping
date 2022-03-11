@@ -43,12 +43,17 @@ class RecipeCheckboxInner extends Component<RecipeCheckboxProps, RecipeCheckboxS
 
   onSwipeRight = () => {
     // Move to pinned
-    itemsStore.setRecipeState(this.props.recipe, RecipeState.Pinned)
+    let recipe = this.props.recipe
+
+    itemsStore.setRecipeState(recipe, Math.max(0, recipe.state - 1))
   }
 
   onSwipeLeft = () => {
     // Move to low priority
-    itemsStore.setRecipeState(this.props.recipe, RecipeState.Disabled)
+
+    let recipe = this.props.recipe
+
+    itemsStore.setRecipeState(recipe, Math.min(2, recipe.state + 1))
   }
 
   onPress = () => {
@@ -137,20 +142,10 @@ class RecipeCheckboxInner extends Component<RecipeCheckboxProps, RecipeCheckboxS
 
     return (
       <ScrollView
-        style={[styles.parent, {opacity: recipe.state === RecipeState.Disabled ? .5 : 1}]}
+        style={[styles.parent, {opacity: recipe.state === RecipeState.Disabled ? .35 : 1}]}
         keyboardShouldPersistTaps="always"
         horizontal={true}
-        onScroll={(e) => {
-          const xOffset = e.nativeEvent.contentOffset.x;
-          if (xOffset < -30 && !this.openingModal) {
-            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
-            this.openingModal = true
-            // Trigger event
-          }
-          if (xOffset == 0 && this.openingModal) {
-            this.openingModal = false
-          }
-        }}
+        onScroll={this.onScroll}
         scrollEventThrottle={16}
       >
         <Pressable onPress={this.onPress} onLongPress={this.onLongPress}>

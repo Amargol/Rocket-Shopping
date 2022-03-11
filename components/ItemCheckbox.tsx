@@ -88,6 +88,9 @@ class ItemCheckboxInner extends Component<ItemCheckboxProps, ItemCheckboxState> 
           itemsStore.setItemState(item.id, ItemState.Disabled)
         } else if (buttonIndex === 5) {
           itemsStore.removeItem(item.id)
+          if (this.props.callback) {
+            this.props.callback()
+          }
         }
       }
     );
@@ -151,7 +154,7 @@ class ItemCheckboxInner extends Component<ItemCheckboxProps, ItemCheckboxState> 
         horizontal={true}
         onScroll={this.onScroll}
         scrollEventThrottle={16}
-        style={{opacity: item.state === ItemState.Disabled ? .5 : 1}}
+        style={{opacity: item.state === ItemState.Disabled ? .35 : 1}}
       >
         <Pressable onPress={this.onPress} onLongPress={this.onLongPress} delayLongPress={250} style={{width: this.width - 40}}>
           <View style={styles.container}>
