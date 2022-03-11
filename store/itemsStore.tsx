@@ -69,10 +69,6 @@ export class Recipe {
   notes: string
   id: string
 
-  get canBeMade() : boolean {
-    return this.requiredIngredients.every((item) => item.isChecked)
-  }
-
   constructor (name : string) {
     this.name = name
     this.requiredIngredients = [];
@@ -87,7 +83,6 @@ export class Recipe {
       optionalIngredients: observable,
       state: observable,
       notes: observable,
-      canBeMade: computed
     })
   }
 }
@@ -444,10 +439,10 @@ class ItemsStore {
     let res = this.recipes.filter((recipe) => {
       return recipe.name.toLowerCase().indexOf(this.searchQuery.toLowerCase()) >= 0
     }).sort((a, b) => {
-      let aCanBeMade = a.canBeMade ? 0 : 1
-      let bCanBeMade = b.canBeMade ? 0 : 1
+      let x = a.requiredIngredients.every((item) => item.isChecked)
+      let y = b.requiredIngredients.every((item) => item.isChecked)
       
-      return bCanBeMade - aCanBeMade
+      return (x === y)? 0 : x? -1 : 1;
     })
 
     return res
