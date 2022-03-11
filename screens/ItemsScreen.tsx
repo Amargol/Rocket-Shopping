@@ -27,7 +27,7 @@ class ItemsScreenInner extends Component<ItemsScreenProps> {
     if (itemsStore.searchQuery !== "" && itemsStore.sortedItems.length > 0) {
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
       itemsStore.toggleItemCheck(itemsStore.sortedItems[0].id)
-      itemsStore.setSearchQuery("")
+      // itemsStore.setSearchQuery("")
     }
   }
 
