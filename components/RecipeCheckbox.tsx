@@ -137,7 +137,7 @@ class RecipeCheckboxInner extends Component<RecipeCheckboxProps, RecipeCheckboxS
 
     return (
       <ScrollView
-        style={styles.parent}
+        style={[styles.parent, {opacity: recipe.state === RecipeState.Disabled ? .5 : 1}]}
         keyboardShouldPersistTaps="always"
         horizontal={true}
         onScroll={(e) => {

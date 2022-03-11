@@ -151,6 +151,7 @@ class ItemCheckboxInner extends Component<ItemCheckboxProps, ItemCheckboxState> 
         horizontal={true}
         onScroll={this.onScroll}
         scrollEventThrottle={16}
+        style={{opacity: item.state === ItemState.Disabled ? .5 : 1}}
       >
         <Pressable onPress={this.onPress} onLongPress={this.onLongPress} delayLongPress={250} style={{width: this.width - 40}}>
           <View style={styles.container}>
