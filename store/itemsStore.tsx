@@ -7,6 +7,12 @@ export enum ItemState {
   Disabled = 2
 }
 
+export interface SplitSortedItems {
+  pinned: Item[],
+  standard: Item[],
+  disabled: Item[]
+}
+
 export class Item {
   name: string
   isChecked: boolean
@@ -47,6 +53,12 @@ export enum RecipeState {
   Pinned = 0,
   Standard = 1,
   Disabled = 2
+}
+
+export interface SplitSortedRecipes {
+  pinned: Recipe[],
+  standard: Recipe[],
+  disabled: Recipe[]
 }
 
 export class Recipe {
@@ -122,6 +134,9 @@ class ItemsStore {
       removeItemFromRecipe: action,
       count: computed,
       sortedItems: computed,
+      sortedRecipes: computed,
+      splitSortedItems: computed,
+      splitSortedRecipes: computed
     })
   }
 
@@ -397,6 +412,63 @@ class ItemsStore {
         return 0
       } else {
         return a.isChecked ? 1 : -1
+      }
+    })
+
+    return res
+  }
+
+  get splitSortedItems() {
+    let res : SplitSortedItems = {
+      pinned: [],
+      standard: [],
+      disabled: []
+    }
+
+    this.sortedItems.forEach(item => {
+      if(item.state === ItemState.Pinned) {
+        res.pinned.push(item)
+      }
+      if(item.state === ItemState.Disabled) {
+        res.disabled.push(item)
+      }
+      if(item.state === ItemState.Standard) {
+        res.standard.push(item)
+      }
+    })
+
+    return res
+  }
+
+  get sortedRecipes() {
+    let res = this.recipes.filter((recipe) => {
+      return recipe.name.toLowerCase().indexOf(this.searchQuery.toLowerCase()) >= 0
+    }).sort((a, b) => {
+      let aCanBeMade = a.canBeMade ? 1 : 0
+      let bCanBeMade = b.canBeMade ? 1 : 0
+      
+      return aCanBeMade - bCanBeMade
+    })
+
+    return res
+  }
+
+  get splitSortedRecipes() {
+    let res : SplitSortedRecipes = {
+      pinned: [],
+      standard: [],
+      disabled: []
+    }
+
+    this.sortedRecipes.forEach(recipe => {
+      if(recipe.state === RecipeState.Pinned) {
+        res.pinned.push(recipe)
+      }
+      if(recipe.state === RecipeState.Disabled) {
+        res.disabled.push(recipe)
+      }
+      if(recipe.state === RecipeState.Standard) {
+        res.standard.push(recipe)
       }
     })
 
