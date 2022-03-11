@@ -1,5 +1,5 @@
 import React, { Component, useEffect, useReducer } from "react";
-import { KeyboardAvoidingView, LayoutAnimation, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
+import { Text, KeyboardAvoidingView, LayoutAnimation, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
 import { Entypo, FontAwesome5 } from '@expo/vector-icons'; 
 import { itemsStore, Recipe } from "../store/itemsStore";
 import { useIsFocused, useNavigation } from '@react-navigation/native';
@@ -77,12 +77,35 @@ class RecipesScreenInner extends Component<RecipesScreenProps> {
   }
 
   render () {
+    let splitSortedRecipes = itemsStore.splitSortedRecipes
+
     return (
       <KeyboardAvoidingView style={styles.container} behavior="padding" keyboardVerticalOffset={90}>
         <ScrollView style={[styles.container, {marginTop: 10}]}>
-          <View style={{height: 10}}></View>
           {
-            itemsStore.recipes.map((recipe) => (
+            splitSortedRecipes.pinned.length !== 0 &&
+            <Text style={styles.categoryText}>Pinned:</Text>
+          }
+          {
+            splitSortedRecipes.pinned.map((recipe) => (
+              <RecipeCheckbox recipe={recipe} key={recipe.id}/>
+            ))
+          }
+          {
+            splitSortedRecipes.standard.length !== 0 &&
+            <Text style={styles.categoryText}>Recipes:</Text>
+          }
+          {
+            splitSortedRecipes.standard.map((recipe) => (
+              <RecipeCheckbox recipe={recipe} key={recipe.id}/>
+            ))
+          }
+          {
+            splitSortedRecipes.disabled.length !== 0 &&
+            <Text style={styles.categoryText}>Disabled:</Text>
+          }
+          {
+            splitSortedRecipes.disabled.map((recipe) => (
               <RecipeCheckbox recipe={recipe} key={recipe.id}/>
             ))
           }
@@ -191,5 +214,10 @@ const styles = StyleSheet.create({
   recipeDetailText: {
     marginTop: 10,
     color: "white",
+  },
+  categoryText: {
+    color: "#8E8E92",
+    paddingHorizontal: 10,
+    paddingTop: 10
   }
 });

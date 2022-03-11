@@ -70,7 +70,7 @@ class ItemCheckboxInner extends Component<ItemCheckboxProps, ItemCheckboxState> 
 
     ActionSheetIOS.showActionSheetWithOptions(
       {
-        options: ['Cancel', 'View Details', 'Move to Pin', 'Move to Standard', 'Move to Disabled', 'Delete'],
+        options: ['Cancel', 'View Details', 'Move to Pinned', 'Move to Items', 'Move to Disabled', 'Delete'],
         destructiveButtonIndex: 5,
         cancelButtonIndex: 0,
         userInterfaceStyle: 'dark',

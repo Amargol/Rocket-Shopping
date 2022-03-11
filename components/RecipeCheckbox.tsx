@@ -65,7 +65,7 @@ class RecipeCheckboxInner extends Component<RecipeCheckboxProps, RecipeCheckboxS
     // Open menu
     ActionSheetIOS.showActionSheetWithOptions(
       {
-        options: ['Cancel', 'View Details', 'Move to Pin', 'Move to Standard', 'Move to Disabled', 'Delete'],
+        options: ['Cancel', 'View Details', 'Move to Pinned', 'Move to Recipes', 'Move to Disabled', 'Delete'],
         destructiveButtonIndex: 5,
         cancelButtonIndex: 0,
         userInterfaceStyle: 'dark',

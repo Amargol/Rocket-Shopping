@@ -444,10 +444,10 @@ class ItemsStore {
     let res = this.recipes.filter((recipe) => {
       return recipe.name.toLowerCase().indexOf(this.searchQuery.toLowerCase()) >= 0
     }).sort((a, b) => {
-      let aCanBeMade = a.canBeMade ? 1 : 0
-      let bCanBeMade = b.canBeMade ? 1 : 0
+      let aCanBeMade = a.canBeMade ? 0 : 1
+      let bCanBeMade = b.canBeMade ? 0 : 1
       
-      return aCanBeMade - bCanBeMade
+      return bCanBeMade - aCanBeMade
     })
 
     return res
