@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "shopping",
-    "slug": "shopping",
-    "version": "1.0.0",
+    "name": "Shopping List - Grocery Rocket",
+    "slug": "shopking",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "myapp",
@@ -19,7 +19,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": false,
+      "bundleIdentifier": "com.shray.shopking"
     },
     "android": {
       "adaptiveIcon": {

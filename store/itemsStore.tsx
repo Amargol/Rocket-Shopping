@@ -125,6 +125,7 @@ class ItemsStore {
       updateRecipe: action,
       setRecipeState: action,
       moveRecipe: action,
+      shuffleRecipes: action,
       addItemToRecipe: action,
       removeItemFromRecipe: action,
       count: computed,
@@ -369,6 +370,11 @@ class ItemsStore {
     this.saveToStore()
 
     return true
+  }
+
+  shuffleRecipes() {
+    this.recipes = this.recipes.sort((a, b) => 0.5 - Math.random())
+    console.log(this.recipes)
   }
 
   addItemToRecipe(item : Item, recipe : Recipe, isRequired : boolean) {

@@ -23,12 +23,9 @@ class RecipesScreenInner extends Component<RecipesScreenProps> {
     super(props);
   }
 
-  checkFirstItem = () => {
-    if (itemsStore.searchQuery !== "" && itemsStore.sortedItems.length > 0) {
-      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
-      itemsStore.toggleItemCheck(itemsStore.sortedItems[0].id)
-      itemsStore.setSearchQuery("")
-    }
+  shuffle = () => {
+    console.log("hi")
+    itemsStore.shuffleRecipes()
   }
 
   addItem = () => {
@@ -124,7 +121,7 @@ class RecipesScreenInner extends Component<RecipesScreenProps> {
             clearButtonMode="always"
             autoCapitalize="words"
           />
-          <TouchableOpacity onPress={this.checkFirstItem} activeOpacity={.5}>
+          <TouchableOpacity onPress={() => {this.shuffle()}} activeOpacity={.5}>
             <View style={styles.addButton}>
               <Entypo name="shuffle" size={28} color="#3377F6" />
             </View>
