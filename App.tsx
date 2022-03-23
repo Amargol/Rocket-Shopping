@@ -20,3 +20,12 @@ export default function App() {
     );
   }
 }
+
+/* 
+Build
+eas build --platform ios
+
+
+submit build to ios
+eas submit -p ios --latest
+*/
